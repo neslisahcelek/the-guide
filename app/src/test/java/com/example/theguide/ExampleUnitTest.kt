@@ -1,4 +1,4 @@
-package com.example.seniordesignproject
+package com.example.theguide
 
 import org.junit.Test
 

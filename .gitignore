@@ -77,3 +77,8 @@ hs_err_pid*
 replay_pid*
 
 .gitignore
+.idea/gradle.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/gradle.xml
+.idea/misc.xml

@@ -1,4 +1,4 @@
-package com.example.seniordesignproject
+package com.example.theguide
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

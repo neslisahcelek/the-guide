@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Senior Design Project"
+rootProject.name = "The Guide"
 include(":app")
  
