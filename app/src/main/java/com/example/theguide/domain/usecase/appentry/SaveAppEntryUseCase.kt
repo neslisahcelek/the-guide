@@ -1,4 +1,4 @@
-package com.example.theguide.domain.usecase
+package com.example.theguide.domain.usecase.appentry
 
 import com.example.theguide.domain.manager.LocalUserManager
 
