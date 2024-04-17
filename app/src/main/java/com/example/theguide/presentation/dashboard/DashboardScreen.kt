@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.theguide.R
 import com.example.theguide.ui.component.PrimaryAppBar
 import com.example.theguide.ui.component.RecommendationCard
+import com.example.theguide.ui.theme.TheGuideTheme
 
 //import androidx.constraintlayout.compose.ConstraintLayout
 
@@ -69,8 +70,10 @@ fun DashboardScreen(
     }
 }
 
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun DashboardScreenPreview() {
-    DashboardScreen()
+    TheGuideTheme {
+        DashboardScreen()
+    }
 }
