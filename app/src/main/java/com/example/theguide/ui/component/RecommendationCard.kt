@@ -1,6 +1,7 @@
 package com.example.theguide.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,24 +24,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theguide.R
-import com.example.theguide.ui.theme.retroColorPalette
 import com.example.theguide.ui.theme.yellow
 
 @Composable
 fun RecommendationCard(
     image: Int,
     name: String,
-    rating: String
+    rating: String,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
+            .clickable { onClick.invoke() }
             .fillMaxWidth()
             .wrapContentHeight(),
         shape = RoundedCornerShape(20.dp),
@@ -105,6 +106,7 @@ fun RecommendationCardPreview() {
     RecommendationCard(
         image = R.drawable.understone,
         name = "Understone Coffee",
-        rating = "4.5"
+        rating = "4.5",
+        onClick = {}
     )
 }
