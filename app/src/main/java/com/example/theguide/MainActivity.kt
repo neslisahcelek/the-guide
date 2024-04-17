@@ -42,10 +42,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TheGuideTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.Black
-                ) {
+                Surface( modifier = Modifier.fillMaxSize() ) {
                     TheGuideNavGraph()
                 }
             }
