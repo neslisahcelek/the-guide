@@ -15,5 +15,5 @@ val orange = Color(0xFFC66749)
 val softPink = Color(0xFFFFAB91)
 val pastelBlue = Color(0xFF90CAF9)
 val pastelGreen = Color(0xFFA5D6A7)
+val yellow = Color(0xFFE6BE32)
 
-val retroColorPalette = listOf(softOrange, orange, softPink, pastelBlue, pastelGreen)

@@ -54,14 +54,16 @@ fun DashboardScreen(
                         RecommendationCard(
                             image = R.drawable.walkers,
                             name = "Walkers",
-                            rating = "4.5"
+                            rating = "4.5",
+                            onClick = { navigate.invoke("Walkers") }
                         )
                     }
                     item {
                         RecommendationCard(
                             image = R.drawable.understone,
                             name = "Understone Coffee",
-                            rating = "4.5"
+                            rating = "4.5",
+                            onClick = { navigate.invoke("Understone") }
                         )
                     }
                 }
