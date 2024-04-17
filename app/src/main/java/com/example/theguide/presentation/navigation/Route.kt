@@ -6,4 +6,5 @@ sealed class Route(
     data object DashboardScreen : Route("dashboardScreen")
     data object WelcomeScreen : Route("welcomeScreen")
     data object ProfileScreen : Route("profileScreen")
+    data object TopPlacesScreen : Route("topPlacesScreen")
 }
