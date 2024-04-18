@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">The Guide</string>
+    <string name="welcome_screen_title">Hoşgeldin, %1$s!</string>
+    <string name="dashboard_screen_title">Senin İçin Önerilenler</string>
+    <string name="card_title">Profilinle %90 Uyumlu</string>
+    <string name="top_places_screen_title">Şehrinin En İyileri</string>
+
+
 </resources>

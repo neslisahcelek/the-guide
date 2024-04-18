@@ -2,6 +2,7 @@ package com.example.theguide.presentation.welcome
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,22 +18,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.theguide.R
-import com.example.theguide.ui.component.PrimaryAppBar
+import com.example.theguide.presentation.navigation.Route
+import com.example.theguide.ui.component.WelcomeTopAppBar
+import com.example.theguide.ui.theme.TheGuideTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun WelcomeScreen(
-    event: (WelcomeEvent) -> Unit = {}
+    event: (WelcomeEvent) -> Unit = {},
+    navigate: (String) -> Unit = {}
 ) {
     Surface (modifier = Modifier.fillMaxSize()) {
         Scaffold (
             modifier = Modifier.fillMaxSize(),
-            topBar = { PrimaryAppBar(title = stringResource(id = R.string.welcome_screen_title)) }
+            topBar = { WelcomeTopAppBar(name = "Name") }
         ) { values ->
             Column (
                 modifier = Modifier
@@ -42,16 +43,26 @@ fun WelcomeScreen(
                     .background(MaterialTheme.colorScheme.surface)
             ){
                 Spacer(modifier = Modifier.fillMaxHeight(0.9f))
+
                 val scope = rememberCoroutineScope()
-                Button(
-                    onClick = {
-                        scope.launch {
-                            event.invoke(WelcomeEvent.SaveAppEntry)
-                        } },
-                    modifier = Modifier.wrapContentSize()
-                ) {
-                    Text("Click to get in!")
+                Row {
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                event.invoke(WelcomeEvent.SaveAppEntry)
+                            } },
+                        modifier = Modifier.wrapContentSize()
+                    ) {
+                        Text("Enter app")
+                    }
+                    Button(
+                        onClick = { navigate(Route.DashboardScreen.route) },
+                        modifier = Modifier.wrapContentSize()
+                    ) {
+                        Text("Click to get in!")
+                    }
                 }
+
             }
         }
     }
@@ -60,5 +71,7 @@ fun WelcomeScreen(
 @Preview
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen()
+    TheGuideTheme {
+        WelcomeScreen()
+    }
 }
