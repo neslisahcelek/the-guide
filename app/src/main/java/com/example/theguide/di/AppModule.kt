@@ -2,6 +2,8 @@ package com.example.theguide.di
 
 import android.app.Application
 import com.example.theguide.data.manager.LocalUserManagerImpl
+import com.example.theguide.data.remote.PlacesAPI
+import com.example.theguide.data.repository.PlaceRepositoryImpl
 import com.example.theguide.domain.manager.LocalUserManager
 import com.example.theguide.domain.usecase.appentry.AppEntryUseCases
 import com.example.theguide.domain.usecase.appentry.ReadAppEntryUseCase
@@ -20,7 +22,7 @@ object AppModule {
     @Singleton
     fun provideLocalUserManager(
         application: Application
-    ) : LocalUserManager = LocalUserManagerImpl(application)
+    ): LocalUserManager = LocalUserManagerImpl(application)
 
     @Provides
     @Singleton
@@ -30,4 +32,13 @@ object AppModule {
         readAppEntryUseCase = ReadAppEntryUseCase(localUserManager),
         saveAppEntryUseCase = SaveAppEntryUseCase(localUserManager)
     )
+
+    @Provides
+    @Singleton
+    fun providePlacesRepository(
+        placesAPI: PlacesAPI
+    ) = PlaceRepositoryImpl(placesAPI)
+
+
+
 }
