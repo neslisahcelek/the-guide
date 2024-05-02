@@ -6,34 +6,41 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theguide.R
 import com.example.theguide.domain.model.Place
-import com.example.theguide.ui.component.PrimaryAppBar
+import com.example.theguide.presentation.welcome.CategoryRow
+import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
 
 @Composable
 fun TopPlacesScreen(
-    event: (TopPlacesEvent) -> Unit = {},
+    action: (TopPlacesAction) -> Unit = {},
+    state: TopPlacesState = TopPlacesState(),
     navigate: (String) -> Unit = {},
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { PrimaryAppBar(title = stringResource(id = R.string.top_places_screen_title)) }
+            topBar = { PrimaryTopAppBar(title = stringResource(id = R.string.top_places_screen_title)) }
         ) { values ->
             Column(
                 modifier = Modifier
@@ -47,37 +54,25 @@ fun TopPlacesScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(10.dp),
                 ) {
-                    /*
                     item {
-                        LazyRow(
-                            modifier = Modifier,
-                            horizontalArrangement = Arrangement.spacedBy(18.dp)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.Start
                         ) {
-                            item {
-                                RecommendationCard(
-                                    image = R.drawable.walkers,
-                                    name = "Walkers",
-                                    rating = "4.5",
-                                    onClick = { navigate.invoke("Walkers") }
-                                )
-                                RecommendationCard(
-                                    image = R.drawable.understone,
-                                    name = "Understone Coffee",
-                                    rating = "4.5",
-                                    onClick = { navigate.invoke("Understone") }
-                                )
-                            }
+                            Text(
+                                text = "Kafeler",
+                                modifier = Modifier.padding(horizontal = 10.dp),
+                                color = Color.Black,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            CategoryRow(
+                                action = action,
+                                state = state
+                            )
                         }
-                    }
-
-                     */
-                    items(event.invoke(TopPlacesEvent.LoadTopPlaces)) { place ->
-                        RecommendationCard(
-                            image = place.image,
-                            name = place.name,
-                            rating = place.rating.toString(),
-                            onClick = { navigate.invoke(place.name) }
-                        )
                     }
                 }
             }
@@ -90,7 +85,22 @@ fun TopPlacesScreen(
 fun TopPlacesScreenPreview() {
     TheGuideTheme {
         TopPlacesScreen(
-
+            state = TopPlacesState(
+                topPlaces = listOf(
+                    Place(
+                        id = "1",
+                        name = "Understone",
+                        rating = 4.5,
+                        image = R.drawable.understone
+                    ),
+                    Place(
+                        id = "2",
+                        name = "Walkers",
+                        rating = 4.3,
+                        image = R.drawable.walkers
+                    )
+                )
+            )
         )
     }
 }

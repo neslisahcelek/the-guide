@@ -26,7 +26,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theguide.R
@@ -34,39 +33,42 @@ import com.example.theguide.ui.theme.yellow
 
 @Composable
 fun RecommendationCard(
+    modifier: Modifier = Modifier,
     image: Int,
     name: String,
     rating: String,
     onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .clickable { onClick.invoke() }
-            .fillMaxWidth()
-            .wrapContentHeight(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        )
+        ),
+        modifier = modifier
+            .clickable { onClick.invoke() }
+            .fillMaxWidth()
+            .wrapContentHeight(),
     ) {
         Column(
-            modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            /*
             Text(
                 text = stringResource(id = R.string.card_title),
                 color = Color.DarkGray,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 10.dp)
             )
+
+             */
             Image(
                 painterResource(id = image),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(130.dp)
-                    .clip(RoundedCornerShape(20.dp)),
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
                 contentDescription = "Place Image"
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -74,7 +76,8 @@ fun RecommendationCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = 10.dp)
+                    .padding(bottom = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
@@ -82,17 +85,17 @@ fun RecommendationCard(
                     color = Color.Black,
                     style = MaterialTheme.typography.titleMedium,
                 )
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.Bottom) {
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = "Rating",
                         tint = yellow,
-                        modifier = Modifier.size(18.dp),
+                        modifier = Modifier.size(20.dp),
                     )
                     Text(
                         text = rating,
                         color = Color.Black,
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             }

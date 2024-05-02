@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun WelcomeScreen(
-    event: (WelcomeEvent) -> Unit = {},
+    event: (WelcomeAction) -> Unit = {},
     navigate: (String) -> Unit = {}
 ) {
     Surface (modifier = Modifier.fillMaxSize()) {
@@ -49,7 +49,7 @@ fun WelcomeScreen(
                     Button(
                         onClick = {
                             scope.launch {
-                                event.invoke(WelcomeEvent.SaveAppEntry)
+                                event.invoke(WelcomeAction.SaveAppEntry)
                             } },
                         modifier = Modifier.wrapContentSize()
                     ) {
