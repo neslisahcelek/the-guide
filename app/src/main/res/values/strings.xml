@@ -4,6 +4,7 @@
     <string name="dashboard_screen_title">Senin İçin Önerilenler</string>
     <string name="card_title">Profilinle %90 Uyumlu</string>
     <string name="top_places_screen_title">Şehrinin En İyileri</string>
-
+    <string name="sign_in_with_google">Google ile Giriş Yap</string>
+    <string name="sign_in_successfull">Giriş Yapıldı</string>
 
 </resources>

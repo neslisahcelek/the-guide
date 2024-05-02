@@ -3,6 +3,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -101,6 +102,17 @@ dependencies {
     // preferences data store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+
+    // google sign in
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.12")
+
+    // image loading
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
 
 kapt {
