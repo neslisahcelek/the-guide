@@ -11,6 +11,10 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val softOrange = Color(0xFFCC775C)
+val softBlurOrange = Color(0x8FD58267)
+val softOrangeText = Color(0xD5833C23)
+val buttonbg = Color(0xEDA09C96)
+
 val orange = Color(0xFFC66749)
 val softPink = Color(0xFFFFAB91)
 val pastelBlue = Color(0xFF90CAF9)
