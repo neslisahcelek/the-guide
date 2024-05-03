@@ -1,4 +1,4 @@
-package com.example.theguide.domain.util
+package com.example.theguide.domain.resource
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
     class Success<T>(data: T) : Resource<T>(data)
