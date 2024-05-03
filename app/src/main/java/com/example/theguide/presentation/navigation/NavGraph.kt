@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.theguide.presentation.dashboard.DashboardScreen
 import com.example.theguide.presentation.dashboard.DashboardVM
 import com.example.theguide.presentation.login.LoginScreen
+import com.example.theguide.presentation.login.LoginVM
 import com.example.theguide.presentation.topplaces.TopPlacesScreen
 import com.example.theguide.presentation.topplaces.TopPlacesVM
 import com.example.theguide.presentation.welcome.WelcomeScreen
@@ -22,7 +23,9 @@ fun TheGuideNavGraph() {
         startDestination = Route.LoginScreen.route
     ) {
         composable(Route.LoginScreen.route) {
+            val viewModel: LoginVM = hiltViewModel()
             LoginScreen(
+                action = viewModel::onAction,
                 navigate = { route ->
                     navController.navigate(route)
                 })
