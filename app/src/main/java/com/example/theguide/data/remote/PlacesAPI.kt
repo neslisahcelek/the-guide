@@ -2,10 +2,7 @@ package com.example.theguide.data.remote
 
 import com.example.theguide.data.remote.dto.PlaceDto
 import com.example.theguide.data.remote.dto.UserIdDto
-import com.example.theguide.data.remote.dto.id
-import com.example.theguide.data.remote.dto.place
-import org.json.JSONArray
-import org.json.JSONObject
+import com.example.theguide.data.remote.dto.PlaceNameDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -18,14 +15,14 @@ interface PlacesAPI {
     ): List<PlaceDto>
 
     @GET("/user_id/a")
-    suspend fun fetchData2(): String
+    suspend fun getUserId(): String
 
     @GET("/place_name/1")
-    suspend fun fetchData3(): place
+    suspend fun getPlaceName(): PlaceNameDto
 
     @GET("/recommend?uid=1&k=1&remove_seen=false")
-    suspend fun fetchData4(): List<Double>
+    suspend fun getRecommendation(): List<Double>
 
     @POST("/add_new_user")
-    suspend fun fetchData(@Body userData: UserInfo): UserIdDto
+    suspend fun createUser(@Body userInfo: UserInfo): UserIdDto
 }
