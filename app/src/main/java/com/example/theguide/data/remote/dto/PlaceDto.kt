@@ -1,4 +1,4 @@
-package com.example.theguide.data.remote
+package com.example.theguide.data.remote.dto
 
 import com.example.theguide.domain.model.Place
 import com.squareup.moshi.Json
