@@ -34,7 +34,7 @@ fun TheGuideNavGraph() {
         composable(Route.WelcomeScreen.route) {
             val viewModel: WelcomeVM = hiltViewModel()
             WelcomeScreen(
-                event = viewModel::onAction,
+                action = viewModel::onAction,
                 navigate = { route ->
                     navController.navigate(route)
                 })
