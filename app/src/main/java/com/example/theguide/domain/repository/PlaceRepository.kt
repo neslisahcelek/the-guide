@@ -6,7 +6,8 @@ import com.example.theguide.domain.resource.Resource
 
 interface PlaceRepository {
     suspend fun getPlaces(): Resource<List<Place>>
-
     suspend fun getUserId(): Resource<String>
-    suspend fun getUserId(info: UserInfo): Resource<String>
+    suspend fun createUser(info: UserInfo): Resource<String>
+    suspend fun getPlaceName(): Resource<String>
+    suspend fun getRecommendation(): Resource<List<Double>>
 }

@@ -1,6 +1,6 @@
 package com.example.theguide.data.mapper
 
-import com.example.theguide.data.remote.PlaceDto
+import com.example.theguide.data.remote.dto.PlaceDto
 import com.example.theguide.domain.model.Place
 
 fun List<PlaceDto>.toPlaceModel() = map { placeDto: PlaceDto ->

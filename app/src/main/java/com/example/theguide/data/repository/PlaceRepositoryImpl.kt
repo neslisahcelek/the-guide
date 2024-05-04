@@ -1,18 +1,56 @@
 package com.example.theguide.data.repository
 
-import android.util.Log
 import com.example.theguide.data.mapper.toPlaceModel
 import com.example.theguide.data.remote.PlacesAPI
 import com.example.theguide.data.remote.UserInfo
 import com.example.theguide.domain.model.Place
 import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.resource.Resource
-import org.json.JSONArray
-import org.json.JSONObject
 
 class PlaceRepositoryImpl constructor(
     private val placesAPI: PlacesAPI
 ) : PlaceRepository {
+      override suspend fun getUserId(): Resource<String> {
+        return try {
+            val response = placesAPI.getUserId()
+            Resource.Success(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (getUserId)")
+        }
+    }
+
+    override suspend fun createUser(info: UserInfo): Resource<String> {
+        return try {
+            val userId = placesAPI.createUser(info)
+            Resource.Success(userId.toString())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (addUser)")
+        }
+    }
+
+    override suspend fun getPlaceName(): Resource<String> {
+        return try {
+            val response = placesAPI.getPlaceName()
+            Resource.Success(response.placeName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (getPlaceName)")
+        }
+    }
+
+    override suspend fun getRecommendation(): Resource<List<Double>> {
+        return try {
+            Resource.Success(
+                placesAPI.getRecommendation()
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error("An error occurred (getRecommendation)")
+        }
+    }
+
     override suspend fun getPlaces(): Resource<List<Place>> {
         return try {
             Resource.Success(
@@ -20,35 +58,9 @@ class PlaceRepositoryImpl constructor(
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            Resource.Error("An error occurred")
+            Resource.Error("An error occurred (getPlaces)")
         }
     }
 
-    override suspend fun getUserId(): Resource<String> {
-        TODO("Not yet implemented")
-    }
 
-    /*
-    override suspend fun getUserId(): Resource<String> {
-        return try {
-            val response = placesAPI.fetchData()
-            val id = response.place_name
-            Resource.Success(id.toString())
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(e.message ?: "An error occurred")
-        }
-    }
-
-     */
-    override suspend fun getUserId(info: UserInfo): Resource<String> {
-        return try {
-            val response = placesAPI.fetchData(info)
-            val id = response.toString()
-            Resource.Success(id.toString())
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(e.message ?: "An error occurred")
-        }
-    }
 }

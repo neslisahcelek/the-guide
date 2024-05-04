@@ -9,6 +9,9 @@ import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.usecase.appentry.AppEntryUseCases
 import com.example.theguide.domain.usecase.appentry.ReadAppEntryUseCase
 import com.example.theguide.domain.usecase.appentry.SaveAppEntryUseCase
+import com.example.theguide.domain.usecase.place.CreateUserUseCase
+import com.example.theguide.domain.usecase.place.GetPlaceNameUseCase
+import com.example.theguide.domain.usecase.place.GetRecommendationUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
 import dagger.Module
 import dagger.Provides
@@ -58,10 +61,28 @@ object AppModule {
         return PlaceRepositoryImpl(placesAPI)
     }
 
+    @Singleton
     @Provides
     fun provideGetUserUseCase(repository: PlaceRepository): GetUserUseCase {
         return GetUserUseCase(repository)
     }
 
+    @Singleton
+    @Provides
+    fun provideGetPlaceNameUseCase(repository: PlaceRepository): GetPlaceNameUseCase {
+        return GetPlaceNameUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetRecommendationUseCase(repository: PlaceRepository): GetRecommendationUseCase {
+        return GetRecommendationUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCreateUserUseCase(repository: PlaceRepository): CreateUserUseCase {
+        return CreateUserUseCase(repository)
+    }
 
 }
