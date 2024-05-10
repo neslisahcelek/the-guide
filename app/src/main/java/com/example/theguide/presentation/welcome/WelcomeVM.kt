@@ -31,9 +31,6 @@ class WelcomeVM @Inject constructor(
     private val _state = MutableStateFlow(WelcomeState())
     val state = _state.asStateFlow()
 
-    var isListCompleted by mutableStateOf(false)
-        private set
-
     private val _userId = MutableLiveData<Resource<String>>()
     val userId: LiveData<Resource<String>>
         get() = _userId
@@ -72,37 +69,28 @@ class WelcomeVM @Inject constructor(
     fun onAction(action: WelcomeAction) {
         when (action) {
             is WelcomeAction.SaveAppEntry -> saveAppEntry()
-            WelcomeAction.NavigateToDashboard -> navigateToDashboard()
             is WelcomeAction.RatePlace -> addRating(action.placeId, action.rating)
         }
     }
 
     private fun addRating(placeId: String, rating: Double) {
         //api
-        if (isListCompleted) {
-            navigateToDashboard()
-        } else {
+        if (!state.value.isListCompleted) {
             getNextPlace()
         }
     }
 
     private fun getNextPlace() {
-        if (state.currentPlace == state.placeList.last()) {
-            Log.d("ListCompleted", "${state.currentPlace.name} ${state.placeList.last().name}")
-            isListCompleted = true
-        } else {
-            Log.d("ListNotCompleted", "${state.currentPlace.name}")
-            state.currentPlace = state.placeList[state.currentPlaceIndex++]
-            Log.d("ListNotCompleted", "${state.currentPlace.name} ${state.currentPlaceIndex}")
-        }
-    }
-
-    private fun navigateToDashboard() {
-        val info = UserInfo("dşdlşd")
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = getUserUseCase.execute(info)
-            _userId.postValue(result)
-            Log.d("LoginVM", "data: ${result.data} message: ${result.message}")
+        _state.update {
+            if (state.value.currentPlace == state.value.placeList.last()) {
+                it.copy(
+                    isListCompleted = true
+                )
+            } else {
+                it.copy(
+                    currentPlace = state.value.placeList[state.value.currentPlaceIndex++]
+                )
+            }
         }
     }
 

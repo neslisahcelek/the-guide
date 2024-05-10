@@ -56,6 +56,7 @@ fun RateCard(
     place: Place,
     action: (WelcomeAction) -> Unit = {},
     state: WelcomeState,
+    navigate: (String) -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -63,7 +64,7 @@ fun RateCard(
             containerColor = Color.White
         ),
         modifier = modifier
-            .clickable {  } //place url
+            .clickable { } //place url
             .fillMaxWidth()
             .wrapContentHeight()
 
@@ -104,7 +105,7 @@ fun RateCard(
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            RatingSlider(action = action, state = state)
+            RatingSlider(action = action, state = state, navigate = navigate)
         }
     }
 }
@@ -112,7 +113,8 @@ fun RateCard(
 @Composable
 fun RatingSlider(
     action: (WelcomeAction) -> Unit = {},
-    state: WelcomeState
+    state: WelcomeState,
+    navigate: (String) -> Unit = {},
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Row(
@@ -139,15 +141,23 @@ fun RatingSlider(
         )
     }
 
-    Row(horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Button(
             onClick = {
-                action.invoke(
-                    WelcomeAction.RatePlace(
-                        placeId = state.currentPlace.id,
-                        rating = sliderPosition.toDouble()
-                    ))
+                if (!state.isListCompleted) {
+                    action.invoke(
+                        WelcomeAction.RatePlace(
+                            placeId = state.currentPlace.id,
+                            rating = sliderPosition.toDouble()
+                        )
+                    )
+                } else {
+                    navigate.invoke(Route.DashboardScreen.route)
+                }
+
             },
             modifier = Modifier.wrapContentSize()
         ) {

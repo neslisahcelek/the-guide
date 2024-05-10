@@ -11,5 +11,6 @@ data class WelcomeState (
         rating = 4.5,
         image = R.drawable.walkers,
     ),
-    var currentPlaceIndex: Int = 0
+    var currentPlaceIndex: Int = 0,
+    var isListCompleted: Boolean = false,
 )
