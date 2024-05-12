@@ -1,6 +1,9 @@
 package com.example.theguide.di
 
 import android.app.Application
+import androidx.room.Room
+import com.example.theguide.data.local.UserDao
+import com.example.theguide.data.local.UserDatabase
 import com.example.theguide.data.manager.LocalUserManagerImpl
 import com.example.theguide.data.remote.PlacesAPI
 import com.example.theguide.data.repository.PlaceRepositoryImpl
@@ -18,6 +21,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -90,6 +95,36 @@ object AppModule {
     @Provides
     fun provideAddRatingUseCase(repository: PlaceRepository): AddRatingUseCase {
         return AddRatingUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDao(
+        userDatabase: UserDatabase
+    ): UserDao {
+        return userDatabase.userDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDatabase(
+        application: Application
+    ): UserDatabase {
+        return Room.databaseBuilder(
+            application,
+            UserDatabase::class.java,
+            "user_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
     }
 
 }
