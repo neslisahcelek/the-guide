@@ -1,5 +1,6 @@
 package com.example.theguide.ui.component
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -88,7 +90,7 @@ fun RateCard(
             }
 
             Image(
-                painterResource(id = place.image),
+                painterResource(id = place.imageUrl.toInt()),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -137,7 +139,7 @@ fun RatingSlider(
                 inactiveTrackColor = bg,
             ),
             steps = 4,
-            valueRange = 0f..5f
+            valueRange = 0f..5f,
         )
     }
 
@@ -147,20 +149,20 @@ fun RatingSlider(
     ) {
         Button(
             onClick = {
-                if (!state.isListCompleted) {
-                    action.invoke(
-                        WelcomeAction.RatePlace(
-                            placeId = state.currentPlace.id,
-                            rating = sliderPosition.toDouble()
-                        )
+                Log.d("RateCard", "List not complete: ${state.currentPlaceIndex}")
+                action.invoke(
+                    WelcomeAction.RatePlace(
+                        placeId = state.currentPlace.id,
+                        rating = sliderPosition.toDouble()
                     )
-                } else {
-                    navigate.invoke(Route.DashboardScreen.route)
-                }
-
+                )
             },
             modifier = Modifier.wrapContentSize()
         ) {
+            if (state.isListCompleted) {
+                Log.d("RateCard", "List completed: ${state.currentPlaceIndex}")
+                navigate.invoke(Route.DashboardScreen.route)
+            }
             Text("Puan Ver")
         }
     }
@@ -172,10 +174,10 @@ fun RateCardPreview() {
     TheGuideTheme {
         RateCard(
             place = Place(
-                id = "1",
-                name = "Walkers",
+                id = 2,
+                name = "Understone",
                 rating = 4.5,
-                image = R.drawable.walkers,
+                imageUrl = R.drawable.understone.toString(),
             ),
             action = {},
             state = WelcomeState()

@@ -88,16 +88,22 @@ fun TopPlacesScreenPreview() {
             state = TopPlacesState(
                 topPlaces = listOf(
                     Place(
-                        id = "1",
-                        name = "Understone",
+                        id = 1,
+                        name = "Walkers",
                         rating = 4.5,
-                        image = R.drawable.understone
+                        imageUrl = R.drawable.walkers.toString(),
                     ),
                     Place(
-                        id = "2",
-                        name = "Walkers",
-                        rating = 4.3,
-                        image = R.drawable.walkers
+                        id = 2,
+                        name = "Understone",
+                        rating = 4.5,
+                        imageUrl = R.drawable.understone.toString(),
+                    ),
+                    Place(
+                        id = 3,
+                        name = "Restaurant",
+                        rating = 4.5,
+                        imageUrl = R.drawable.bg.toString(),
                     )
                 )
             )

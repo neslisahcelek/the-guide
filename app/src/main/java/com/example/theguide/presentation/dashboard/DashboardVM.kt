@@ -36,16 +36,22 @@ class DashboardVM @Inject constructor(
         state = state.copy(
             places = listOf(
                 Place(
-                    id = "1",
+                    id = 1,
                     name = "Walkers",
                     rating = 4.5,
-                    image = R.drawable.walkers,
+                    imageUrl = R.drawable.walkers.toString(),
                 ),
                 Place(
-                    id = "2",
-                    name = "Understone Coffee",
-                    rating = 4.3,
-                    image = R.drawable.understone,
+                    id = 2,
+                    name = "Understone",
+                    rating = 4.5,
+                    imageUrl = R.drawable.understone.toString(),
+                ),
+                Place(
+                    id = 3,
+                    name = "Restaurant",
+                    rating = 4.5,
+                    imageUrl = R.drawable.bg.toString(),
                 )
             )
         )

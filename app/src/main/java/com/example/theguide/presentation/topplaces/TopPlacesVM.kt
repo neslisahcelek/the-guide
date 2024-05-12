@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.theguide.R
+import com.example.theguide.domain.model.Place
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -32,17 +33,23 @@ class TopPlacesVM @Inject constructor() : ViewModel() {
         state = state.copy(
             category = "Kafe",
             topPlaces = listOf(
-                com.example.theguide.domain.model.Place(
-                    id = "1",
+                Place(
+                    id = 1,
                     name = "Walkers",
                     rating = 4.5,
-                    image = R.drawable.walkers,
+                    imageUrl = R.drawable.walkers.toString(),
                 ),
-                com.example.theguide.domain.model.Place(
-                    id = "1",
-                    name = "Understone Coffee",
-                    rating = 4.3,
-                    image = R.drawable.understone,
+                Place(
+                    id = 2,
+                    name = "Understone",
+                    rating = 4.5,
+                    imageUrl = R.drawable.understone.toString(),
+                ),
+                Place(
+                    id = 3,
+                    name = "Restaurant",
+                    rating = 4.5,
+                    imageUrl = R.drawable.bg.toString(),
                 )
             )
         )

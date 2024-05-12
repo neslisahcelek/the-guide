@@ -6,10 +6,10 @@ import com.example.theguide.domain.model.Place
 data class WelcomeState (
     var placeList: List<Place> = listOf(),
     var currentPlace: Place = Place(
-        id = "1",
+        id = 1,
         name = "Walkers",
         rating = 4.5,
-        image = R.drawable.walkers,
+        imageUrl = R.drawable.walkers.toString(),
     ),
     var currentPlaceIndex: Int = 0,
     var isListCompleted: Boolean = false,

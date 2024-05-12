@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theguide.R
+import com.example.theguide.domain.model.Place
 import com.example.theguide.presentation.topplaces.TopPlacesAction
 import com.example.theguide.presentation.topplaces.TopPlacesState
 import com.example.theguide.ui.component.RecommendationCard
@@ -28,10 +29,10 @@ fun CategoryRow(
         items(state.topPlaces) { place ->
             RecommendationCard(
                 modifier = Modifier.width(250.dp),
-                image = place.image,
+                image = place.imageUrl.toInt(),
                 name = place.name,
                 rating = place.rating.toString(),
-                onClick = { action(TopPlacesAction.NavigateToPlaceDetails(place.id)) }
+                onClick = { }
             )
         }
     }
@@ -45,17 +46,23 @@ fun CategoryRowPreview() {
             state = TopPlacesState(
                 category = "Kafe",
                 topPlaces = listOf(
-                    com.example.theguide.domain.model.Place(
-                        id = "1",
+                    Place(
+                        id = 1,
                         name = "Walkers",
                         rating = 4.5,
-                        image = R.drawable.walkers,
+                        imageUrl = R.drawable.walkers.toString(),
                     ),
-                    com.example.theguide.domain.model.Place(
-                        id = "1",
-                        name = "Understone Coffee",
-                        rating = 4.3,
-                        image = R.drawable.understone,
+                    Place(
+                        id = 2,
+                        name = "Understone",
+                        rating = 4.5,
+                        imageUrl = R.drawable.understone.toString(),
+                    ),
+                    Place(
+                        id = 3,
+                        name = "Restaurant",
+                        rating = 4.5,
+                        imageUrl = R.drawable.bg.toString(),
                     )
                 )
             )

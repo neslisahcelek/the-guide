@@ -37,7 +37,10 @@ fun DashboardScreen(
     Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { PrimaryTopAppBar(title = stringResource(id = R.string.dashboard_screen_title)) }
+            topBar = { PrimaryTopAppBar(
+                title = stringResource(id = R.string.dashboard_screen_title),
+                onClick = { navigate.invoke(Route.WelcomeScreen.route) }
+            ) }
         ) { values ->
             Column(
                 modifier = Modifier
@@ -53,10 +56,10 @@ fun DashboardScreen(
                 ) {
                     items(state.places) { place ->
                         RecommendationCard(
-                            image = place.image,
+                            image = place.imageUrl.toInt(),
                             name = place.name,
                             rating = place.rating.toString(),
-                            onClick = { action(DashboardAction.NavigateToPlaceDetails(place.id)) }
+                            onClick = {  }
                         )
                     }
                 }
@@ -78,16 +81,22 @@ fun DashboardScreenPreview() {
             state = DashboardState(
                 places = listOf(
                     Place(
-                        id = "1",
+                        id = 1,
                         name = "Walkers",
                         rating = 4.5,
-                        image = R.drawable.walkers,
+                        imageUrl = R.drawable.walkers.toString(),
                     ),
                     Place(
-                        id = "2",
-                        name = "Understone Coffee",
-                        rating = 4.3,
-                        image = R.drawable.understone,
+                        id = 3,
+                        name = "Restaurant",
+                        rating = 4.5,
+                        imageUrl = R.drawable.bg.toString(),
+                    ),
+                    Place(
+                        id = 2,
+                        name = "Understone",
+                        rating = 4.5,
+                        imageUrl = R.drawable.understone.toString(),
                     )
                 )
             )
