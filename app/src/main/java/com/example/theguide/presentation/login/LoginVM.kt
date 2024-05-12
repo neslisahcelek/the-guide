@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.theguide.data.local.UserDao
 import com.example.theguide.data.remote.UserInfo
 import com.example.theguide.domain.resource.Resource
 import com.example.theguide.domain.usecase.place.CreateUserUseCase
@@ -16,6 +17,8 @@ import com.stevdzasan.onetap.GoogleUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -25,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginVM @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
-    private val createUserUseCase: CreateUserUseCase
+    private val createUserUseCase: CreateUserUseCase,
+    private val userDao: UserDao
 ) : ViewModel() {
     private val userCollection = Firebase.firestore.collection("users")
 
@@ -35,6 +39,10 @@ class LoginVM @Inject constructor(
     private val _userId = MutableLiveData<Resource<String>>()
     val userId: LiveData<Resource<String>>
         get() = _userId
+
+    init {
+        isUserLoggedIn()
+    }
 
     fun onAction(action: LoginAction) {
         when (action) {
@@ -50,7 +58,7 @@ class LoginVM @Inject constructor(
         }
     }
 
-    private fun createUser(user: GoogleUser?) = CoroutineScope(Dispatchers.IO).launch {
+    private fun createUser(user: GoogleUser?) = CoroutineScope(IO).launch {
         //userCollection.document(user, SetOptions.merge())
 
         Log.d("LoginVM", "createUser: ${user?.givenName}")
@@ -64,11 +72,32 @@ class LoginVM @Inject constructor(
                 picture = user?.picture
             )
         ).addOnSuccessListener { userReference ->
-            saveUser(userReference, user)
+            saveUserToRoom(userReference, user)
             Log.d("db success", "DocumentSnapshot written with ID: ${userReference.id}")
         }.addOnFailureListener { e ->
             Log.w("db error", "Error adding user", e)
         }
+    }
+
+    private fun saveUserToRoom(ref: DocumentReference, user: GoogleUser?) {
+        CoroutineScope(IO).launch {
+            userDao.upsertUser(
+                com.example.theguide.data.local.UserEntity(
+                    id = ref.id,
+                    googleTokenId = state.value.tokenId,
+                    firstName = user?.givenName ?: "",
+                    lastName = user?.familyName ?: "",
+                    email = user?.email ?: ""
+                )
+            )
+        }
+    }
+
+    private fun isUserLoggedIn() {
+        _state.update {
+            it.copy(isLoggedIn = true)
+        }
+        // TODO
     }
 
     private fun saveUser(ref: DocumentReference, user: GoogleUser?) {
@@ -83,7 +112,7 @@ class LoginVM @Inject constructor(
 
     private fun saveUserInfo(user: GoogleUser?) {
         val info = UserInfo("dşdlşd")
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(IO) {
             val result = getUserUseCase.execute(info)
             _userId.postValue(result)
             Log.d("LoginVM", "data: ${result.data} message: ${result.message}")
