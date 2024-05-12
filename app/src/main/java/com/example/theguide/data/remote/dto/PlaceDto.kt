@@ -1,17 +1,36 @@
 package com.example.theguide.data.remote.dto
 
-import com.example.theguide.domain.model.Place
 import com.squareup.moshi.Json
 
-data class PlaceDto (
-    @field:Json(name = "id")
-    val id: String,
+data class PlaceDto(
+    @field:Json(name = "place_id")
+    val placeId: Int,
+    @field:Json(name = "google_place_id")
+    val googlePlaceId: String,
+    @field:Json(name = "place_details")
+    val placeDetails: PlaceDetails,
+    @field:Json(name = "maps_url")
+    val placeUrl: String,
+)
+
+data class PlaceDetails(
     @field:Json(name = "name")
-    val name: String,
-    @field:Json(name = "description")
-    val description: String,
-    @field:Json(name = "rating")
+    val placeName: String,
+    @field:Json(name = "address")
+    val address: String,
+    @field:Json(name = "opening_hours")
+    val openingHours: List<String>,
     val rating: Double,
-    @field:Json(name = "image")
-    val image: Int
+    @field:Json(name = "types")
+    val categories: List<String>,
+    @field:Json(name = "photos")
+    val photoUrls: List<String>,
+    val reviews: List<Review>
+)
+
+data class Review(
+    @field:Json(name = "author_name")
+    val reviewerName: String,
+    @field:Json(name = "text")
+    val review: String
 )

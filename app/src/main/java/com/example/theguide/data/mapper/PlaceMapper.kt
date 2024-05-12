@@ -5,10 +5,11 @@ import com.example.theguide.domain.model.Place
 
 fun List<PlaceDto>.toPlaceModel() = map { placeDto: PlaceDto ->
     Place(
-        id = placeDto.id,
-        name = "name",
-        description = "description",
-        rating = placeDto.rating,
-        image = placeDto.image
+        id = placeDto.placeId,
+        name = placeDto.placeDetails.placeName,
+        details = placeDto.placeDetails,
+        url = placeDto.placeUrl,
+        rating = placeDto.placeDetails.rating,
+        imageUrl = placeDto.placeDetails.photoUrls.first()
     )
 }
