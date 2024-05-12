@@ -13,8 +13,10 @@ import com.example.theguide.data.remote.UserInfo
 import com.example.theguide.domain.model.Place
 import com.example.theguide.domain.resource.Resource
 import com.example.theguide.domain.usecase.appentry.AppEntryUseCases
+import com.example.theguide.domain.usecase.place.AddRatingUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
 import com.example.theguide.presentation.login.LoginState
+import com.stevdzasan.onetap.GoogleUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WelcomeVM @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases,
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase,
+    private val addRatingUseCase: AddRatingUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(WelcomeState())
     val state = _state.asStateFlow()
@@ -38,22 +41,22 @@ class WelcomeVM @Inject constructor(
     init {
         val placeList = listOf(
             Place(
-                id = "2",
+                id = 2,
                 name = "Understone",
                 rating = 4.5,
-                image = R.drawable.understone,
+                imageUrl = R.drawable.understone.toString(),
             ),
             Place(
-                id = "1",
+                id = 1,
                 name = "Walkers",
                 rating = 4.5,
-                image = R.drawable.walkers,
+                imageUrl = R.drawable.walkers.toString(),
             ),
             Place(
-                id = "3",
+                id = 3,
                 name = "Restaurant",
                 rating = 4.5,
-                image = R.drawable.bg,
+                imageUrl = R.drawable.bg.toString(),
             )
         )
 
@@ -73,9 +76,16 @@ class WelcomeVM @Inject constructor(
         }
     }
 
-    private fun addRating(placeId: String, rating: Double) {
-        //api
+    private fun addRating(placeId: Int, rating: Double) {
+        viewModelScope.launch {
+            addRatingUseCase.execute(
+                userId = userId.value?.data?.toInt() ?: 0,
+                placeId = placeId,
+                rating = rating
+            )
+        }
         if (!state.value.isListCompleted) {
+            Log.d("WelcomeVM", "addRating: ${state.value.currentPlaceIndex}")
             getNextPlace()
         }
     }
@@ -83,12 +93,16 @@ class WelcomeVM @Inject constructor(
     private fun getNextPlace() {
         _state.update {
             if (state.value.currentPlace == state.value.placeList.last()) {
+                Log.d("WelcomeVM", "last: ${state.value.currentPlaceIndex}")
                 it.copy(
                     isListCompleted = true
                 )
             } else {
+                val nextIndex = state.value.currentPlaceIndex+1
+                Log.d("WelcomeVM", "next: $nextIndex")
                 it.copy(
-                    currentPlace = state.value.placeList[state.value.currentPlaceIndex++]
+                    currentPlaceIndex = nextIndex,
+                    currentPlace = state.value.placeList[nextIndex]
                 )
             }
         }
