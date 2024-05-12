@@ -1,9 +1,6 @@
 package com.example.theguide.presentation.login
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,14 +9,17 @@ import com.example.theguide.data.remote.UserInfo
 import com.example.theguide.domain.resource.Resource
 import com.example.theguide.domain.usecase.place.CreateUserUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.stevdzasan.onetap.GoogleUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,9 +29,8 @@ class LoginVM @Inject constructor(
 ) : ViewModel() {
     private val userCollection = Firebase.firestore.collection("users")
 
-    var state by mutableStateOf(LoginState())
-        private set
-
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state.asStateFlow()
 
     private val _userId = MutableLiveData<Resource<String>>()
     val userId: LiveData<Resource<String>>
@@ -46,36 +45,40 @@ class LoginVM @Inject constructor(
     }
 
     private fun saveTokenId(tokenId: String) {
-        state.copy(
-            tokenId = tokenId
-        )
+        _state.update {
+            it.copy(tokenId = tokenId)
+        }
     }
 
     private fun createUser(user: GoogleUser?) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            Log.d("LoginVM", "createUser: ${user?.givenName}")
-            userCollection.add(com.example.theguide.domain.model.User(
+        //userCollection.document(user, SetOptions.merge())
+
+        Log.d("LoginVM", "createUser: ${user?.givenName}")
+        userCollection.add(
+            com.example.theguide.domain.model.User(
                 id = "",
                 firstName = user?.givenName ?: "",
                 lastName = user?.familyName ?: "",
                 email = user?.email ?: "",
                 locale = user?.locale,
                 picture = user?.picture
-            )).await()
-        } catch (e: Exception) {
-            Log.e("LoginVM", "createUser: ${e.message}")
+            )
+        ).addOnSuccessListener { userReference ->
+            saveUser(userReference, user)
+            Log.d("db success", "DocumentSnapshot written with ID: ${userReference.id}")
+        }.addOnFailureListener { e ->
+            Log.w("db error", "Error adding user", e)
         }
+    }
 
-        /*
+    private fun saveUser(ref: DocumentReference, user: GoogleUser?) {
         val userInfo = UserInfo(userName = user?.fullName ?: "")
 
         viewModelScope.launch {
             val result = createUserUseCase.execute(userInfo)
             _userId.postValue(result)
-            Log.d("LoginVM createUser", "userID: ${result.data} message: ${result.message}")
+            Log.d("LoginVM saveUser", "userID: ${result.data} message: ${result.message}")
         }
-
-         */
     }
 
     private fun saveUserInfo(user: GoogleUser?) {
