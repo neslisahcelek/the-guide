@@ -9,6 +9,7 @@ import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.usecase.appentry.AppEntryUseCases
 import com.example.theguide.domain.usecase.appentry.ReadAppEntryUseCase
 import com.example.theguide.domain.usecase.appentry.SaveAppEntryUseCase
+import com.example.theguide.domain.usecase.place.AddRatingUseCase
 import com.example.theguide.domain.usecase.place.CreateUserUseCase
 import com.example.theguide.domain.usecase.place.GetPlaceNameUseCase
 import com.example.theguide.domain.usecase.place.GetRecommendationUseCase
@@ -83,6 +84,12 @@ object AppModule {
     @Provides
     fun provideCreateUserUseCase(repository: PlaceRepository): CreateUserUseCase {
         return CreateUserUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAddRatingUseCase(repository: PlaceRepository): AddRatingUseCase {
+        return AddRatingUseCase(repository)
     }
 
 }

@@ -40,21 +40,13 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-    override suspend fun getRecommendation(): Resource<List<Double>> {
+    override suspend fun getRecommendation(userId: Int, recommendationLimit: Int): Resource<List<Place>> {
         return try {
             Resource.Success(
-                placesAPI.getRecommendation()
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error("An error occurred (getRecommendation)")
-        }
-    }
-
-    override suspend fun getPlaces(): Resource<List<Place>> {
-        return try {
-            Resource.Success(
-                placesAPI.getPlaces("id").toPlaceModel()
+                placesAPI.getRecommendation(
+                    userId = userId,
+                    recommendationLimit = recommendationLimit
+                ).toPlaceModel()
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -62,5 +54,13 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-
+    override suspend fun addRating(userId: Int, placeId: Int, rating: Double): Resource<String> {
+        return try {
+            val response = placesAPI.addRating(userId, placeId, rating)
+            Resource.Success(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (addRating)")
+        }
+    }
 }
