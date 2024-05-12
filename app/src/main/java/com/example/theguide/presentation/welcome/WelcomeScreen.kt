@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,8 +47,8 @@ fun WelcomeScreen(
                 Text(
                     modifier = Modifier.padding(16.dp),
                     textAlign = TextAlign.Center,
-                    text = "Hoşgeldin, sana daha iyi öneriler sunabilmemiz için " +
-                        "şehrinin en iyi mekanlarına puan ver.")
+                    text = "Hoşgeldin, ${state.userName} sana daha iyi öneriler sunabilmemiz için " +
+                        "şehrinin en popüler mekanlarına puan vermelisin.")
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),

@@ -1,24 +1,21 @@
 package com.example.theguide.presentation.welcome
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theguide.R
-import com.example.theguide.data.remote.UserInfo
+import com.example.theguide.data.local.UserDao
 import com.example.theguide.domain.model.Place
 import com.example.theguide.domain.resource.Resource
 import com.example.theguide.domain.usecase.appentry.AppEntryUseCases
 import com.example.theguide.domain.usecase.place.AddRatingUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
-import com.example.theguide.presentation.login.LoginState
-import com.stevdzasan.onetap.GoogleUser
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -29,7 +26,8 @@ import javax.inject.Inject
 class WelcomeVM @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases,
     private val getUserUseCase: GetUserUseCase,
-    private val addRatingUseCase: AddRatingUseCase
+    private val addRatingUseCase: AddRatingUseCase,
+    private val userDao: UserDao
 ) : ViewModel() {
     private val _state = MutableStateFlow(WelcomeState())
     val state = _state.asStateFlow()
@@ -67,12 +65,28 @@ class WelcomeVM @Inject constructor(
                 currentPlaceIndex = 0
             )
         }
+
+        getUserInfo()
     }
 
     fun onAction(action: WelcomeAction) {
         when (action) {
             is WelcomeAction.SaveAppEntry -> saveAppEntry()
             is WelcomeAction.RatePlace -> addRating(action.placeId, action.rating)
+            WelcomeAction.getUserInfo -> getUserInfo()
+        }
+    }
+
+    private fun getUserInfo() {
+        CoroutineScope(IO).launch(IO) {
+            userDao.getUser().let { userEntity ->
+                Log.d("WelcomeVM", "getUserInfo: ${userEntity.firstName}")
+                _state.update {
+                    it.copy(
+                        userName = userEntity.firstName,
+                    )
+                }
+            }
         }
     }
 
@@ -85,7 +99,6 @@ class WelcomeVM @Inject constructor(
             )
         }
         if (!state.value.isListCompleted) {
-            Log.d("WelcomeVM", "addRating: ${state.value.currentPlaceIndex}")
             getNextPlace()
         }
     }
@@ -93,13 +106,11 @@ class WelcomeVM @Inject constructor(
     private fun getNextPlace() {
         _state.update {
             if (state.value.currentPlace == state.value.placeList.last()) {
-                Log.d("WelcomeVM", "last: ${state.value.currentPlaceIndex}")
                 it.copy(
                     isListCompleted = true
                 )
             } else {
                 val nextIndex = state.value.currentPlaceIndex+1
-                Log.d("WelcomeVM", "next: $nextIndex")
                 it.copy(
                     currentPlaceIndex = nextIndex,
                     currentPlace = state.value.placeList[nextIndex]
