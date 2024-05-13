@@ -1,7 +1,9 @@
 package com.example.theguide.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,27 +26,37 @@ fun TheGuideNavGraph() {
     ) {
         composable(Route.LoginScreen.route) {
             val viewModel: LoginVM = hiltViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             LoginScreen(
                 action = viewModel::onAction,
                 navigate = { route ->
                     navController.navigate(route)
-                })
+                },
+                state = state
+            )
         }
 
         composable(Route.WelcomeScreen.route) {
             val viewModel: WelcomeVM = hiltViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             WelcomeScreen(
                 action = viewModel::onAction,
                 navigate = { route ->
                     navController.navigate(route)
-                })
+                },
+                state = state
+            )
         }
 
         composable(Route.DashboardScreen.route) {
             val viewModel: DashboardVM = hiltViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             DashboardScreen(
                 action = viewModel::onAction,
-                state = viewModel.state,
+                state = state,
                 navigate = { route ->
                     navController.navigate(route)
                 })
@@ -52,9 +64,11 @@ fun TheGuideNavGraph() {
 
         composable(Route.TopPlacesScreen.route) {
             val viewModel: TopPlacesVM = hiltViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             TopPlacesScreen(
                 action = viewModel::onAction,
-                state = viewModel.state,
+                state = state,
                 navigate = { route ->
                     navController.navigate(route)
                 })

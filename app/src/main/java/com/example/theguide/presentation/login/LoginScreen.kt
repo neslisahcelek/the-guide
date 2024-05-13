@@ -18,8 +18,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -48,11 +46,9 @@ import com.stevdzasan.onetap.rememberOneTapSignInState
 @Composable
 fun LoginScreen(
     action: (LoginAction) -> Unit = {},
-    navigate: (String) -> Unit = {}
+    navigate: (String) -> Unit = {},
+    state: LoginState
 ) {
-    val viewModel = viewModel<LoginVM>()
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
     if (state.isLoggedIn) {
         navigate.invoke(Route.WelcomeScreen.route)
     } else {
@@ -106,11 +102,8 @@ fun LoginScreen(
                             action.invoke(LoginAction.TokenIdReceived(tokenId))
                             action.invoke(LoginAction.CreateUser(getUserFromTokenId(tokenId)))
                             navigate.invoke(Route.WelcomeScreen.route)
-
                         },
-                        onDialogDismissed = { message ->
-                            Log.d("LOG", message)
-                        }
+                        onDialogDismissed = {}
                     )
 
                     OneTapGoogleButton(
@@ -136,6 +129,6 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     TheGuideTheme {
-        LoginScreen()
+        LoginScreen(state = LoginState())
     }
 }

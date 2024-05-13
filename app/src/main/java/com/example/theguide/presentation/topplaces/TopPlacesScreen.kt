@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theguide.R
 import com.example.theguide.domain.model.Place
+import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.presentation.welcome.CategoryRow
 import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.component.RecommendationCard
@@ -40,7 +41,10 @@ fun TopPlacesScreen(
     Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { PrimaryTopAppBar(title = stringResource(id = R.string.top_places_screen_title)) }
+            topBar = { PrimaryTopAppBar(
+                title = stringResource(id = R.string.top_places_screen_title),
+                onBackClick = { navigate.invoke(Route.DashboardScreen.route) }
+            ) }
         ) { values ->
             Column(
                 modifier = Modifier

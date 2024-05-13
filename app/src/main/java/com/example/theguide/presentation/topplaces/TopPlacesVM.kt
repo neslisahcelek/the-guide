@@ -1,18 +1,17 @@
 package com.example.theguide.presentation.topplaces
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.theguide.R
 import com.example.theguide.domain.model.Place
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
 class TopPlacesVM @Inject constructor() : ViewModel() {
-    var state by mutableStateOf(TopPlacesState())
-        private set
+    private val _state = MutableStateFlow(TopPlacesState())
+    val state = _state.asStateFlow()
 
     init {
         loadTopPlaces()
@@ -50,10 +49,12 @@ class TopPlacesVM @Inject constructor() : ViewModel() {
                 imageUrl = "https://lh3.googleusercontent.com/places/ANXAkqF4Zu9H-23naAAe8lm4du88xkuNIhp-uBF-MSWb03-bKYz6uXR0_NDiDZnkgSIJ_Uxl2ctJ85TACMuLVWVTzMnaeCws6DamgM4=s1600-w400",
             )
         )
-        state = state.copy(
-            category = "Kafe",
-            topPlaces = placeList
-        )
+        _state.update {
+            it.copy(
+                category = "Kafe",
+                topPlaces = placeList
+            )
+        }
     }
 
 
