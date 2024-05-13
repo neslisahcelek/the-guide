@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.theguide.R
 import com.example.theguide.domain.model.Place
 import com.example.theguide.presentation.navigation.Route
@@ -76,15 +77,14 @@ fun RateCard(
                     style = MaterialTheme.typography.titleLarge,
                 )
             }
-
-            Image(
-                painterResource(id = place.imageUrl.toInt()),
+            AsyncImage(
+                model = place.imageUrl, contentDescription = "Place Image",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp),
-                contentDescription = "Place Image"
             )
+
             Spacer(modifier = Modifier.height(10.dp))
             Row {
                 Text(

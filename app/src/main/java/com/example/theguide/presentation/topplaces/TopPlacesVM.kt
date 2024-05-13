@@ -30,28 +30,29 @@ class TopPlacesVM @Inject constructor() : ViewModel() {
     }
 
     private fun loadTopPlaces() {
+        val placeList = listOf(
+            Place(
+                id = 2,
+                name = "Understone",
+                rating = 4.5,
+                imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s",
+            ),
+            Place(
+                id = 1,
+                name = "Walkers",
+                rating = 4.5,
+                imageUrl = "https://lh3.googleusercontent.com/p/AF1QipP5WCtkTdnMTOPErh_wT_2mvaoGvxGvkqMajlvl=s1360-w1360-h1020-rw",
+            ),
+            Place(
+                id = 3,
+                name = "Restaurant",
+                rating = 4.5,
+                imageUrl = "https://lh3.googleusercontent.com/places/ANXAkqF4Zu9H-23naAAe8lm4du88xkuNIhp-uBF-MSWb03-bKYz6uXR0_NDiDZnkgSIJ_Uxl2ctJ85TACMuLVWVTzMnaeCws6DamgM4=s1600-w400",
+            )
+        )
         state = state.copy(
             category = "Kafe",
-            topPlaces = listOf(
-                Place(
-                    id = 1,
-                    name = "Walkers",
-                    rating = 4.5,
-                    imageUrl = R.drawable.walkers.toString(),
-                ),
-                Place(
-                    id = 2,
-                    name = "Understone",
-                    rating = 4.5,
-                    imageUrl = R.drawable.understone.toString(),
-                ),
-                Place(
-                    id = 3,
-                    name = "Restaurant",
-                    rating = 4.5,
-                    imageUrl = R.drawable.bg.toString(),
-                )
-            )
+            topPlaces = placeList
         )
     }
 

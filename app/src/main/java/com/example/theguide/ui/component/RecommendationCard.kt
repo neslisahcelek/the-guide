@@ -28,13 +28,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.theguide.R
 import com.example.theguide.ui.theme.yellow
 
 @Composable
 fun RecommendationCard(
     modifier: Modifier = Modifier,
-    image: Int,
+    image: String,
     name: String,
     rating: String,
     onClick: () -> Unit
@@ -62,8 +63,8 @@ fun RecommendationCard(
             )
 
              */
-            Image(
-                painterResource(id = image),
+            AsyncImage(
+                model = image,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -71,6 +72,7 @@ fun RecommendationCard(
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
                 contentDescription = "Place Image"
             )
+
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
@@ -107,7 +109,7 @@ fun RecommendationCard(
 @Composable
 fun RecommendationCardPreview() {
     RecommendationCard(
-        image = R.drawable.understone,
+        image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s",
         name = "Understone Coffee",
         rating = "4.5",
         onClick = {}

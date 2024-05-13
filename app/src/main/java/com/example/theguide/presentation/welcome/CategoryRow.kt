@@ -29,7 +29,7 @@ fun CategoryRow(
         items(state.topPlaces) { place ->
             RecommendationCard(
                 modifier = Modifier.width(250.dp),
-                image = place.imageUrl.toInt(),
+                image = place.imageUrl,
                 name = place.name,
                 rating = place.rating.toString(),
                 onClick = { }
