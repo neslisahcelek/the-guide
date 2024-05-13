@@ -16,9 +16,7 @@ import com.google.firebase.ktx.Firebase
 import com.stevdzasan.onetap.GoogleUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -41,7 +39,7 @@ class LoginVM @Inject constructor(
         get() = _userId
 
     init {
-        isUserLoggedIn()
+        checkUserLogin()
     }
 
     fun onAction(action: LoginAction) {
@@ -93,11 +91,22 @@ class LoginVM @Inject constructor(
         }
     }
 
-    private fun isUserLoggedIn() {
-        _state.update {
-            it.copy(isLoggedIn = true)
+    private fun checkUserLogin() {
+        var userId = ""
+
+        CoroutineScope(IO).launch(IO) {
+            userDao.getUser().let { userEntity ->
+                userId = userEntity.id
+            }
         }
-        // TODO
+
+        if (userId.isNotEmpty()) {
+            _state.update {
+                it.copy(
+                    isLoggedIn = true
+                )
+            }
+        }
     }
 
     private fun saveUser(ref: DocumentReference, user: GoogleUser?) {
