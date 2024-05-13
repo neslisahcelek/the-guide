@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">The Guide</string>
+    <string name="login_screen_title">Giriş yap,\nŞehrini keşfetmeye başla</string>
     <string name="welcome_screen_title">Hoşgeldin, %1$s!</string>
     <string name="dashboard_screen_title">Senin İçin Önerilenler</string>
     <string name="card_title">Profilinle %90 Uyumlu</string>
     <string name="top_places_screen_title">Şehrinin En İyileri</string>
     <string name="sign_in_with_google">Google ile Giriş Yap</string>
     <string name="sign_in_successfull">Giriş Yapıldı</string>
-
+    <string name="welcome_screen_text">Sana daha iyi öneriler sunabilmemiz için
+        şehrinin en popüler mekanlarına puan vermelisin.</string>
+    <string name="rate_card_question">Bu mekana kaç puan verirdin?</string>
+    <string name="rate_card_button">Puan Ver</string>
 </resources>

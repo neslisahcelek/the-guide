@@ -14,15 +14,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.theguide.R
 import com.example.theguide.ui.component.RateCard
+import com.example.theguide.ui.theme.AlegreyaFontFamily
 import com.example.theguide.ui.theme.TheGuideTheme
+import com.example.theguide.ui.theme.Typography
 
 @Composable
 fun WelcomeScreen(
@@ -45,10 +50,19 @@ fun WelcomeScreen(
                 Spacer(modifier = Modifier.fillMaxHeight(0.1f))
 
                 Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = stringResource(id = R.string.welcome_screen_title, state.userName),
+                    style = Typography.headlineMedium.copy(
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight(500),
+                    )
+                )
+
+                Text(
                     modifier = Modifier.padding(16.dp),
                     textAlign = TextAlign.Center,
-                    text = "Hoşgeldin, ${state.userName} sana daha iyi öneriler sunabilmemiz için " +
-                        "şehrinin en popüler mekanlarına puan vermelisin.")
+                    text = stringResource(id = R.string.welcome_screen_text))
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
