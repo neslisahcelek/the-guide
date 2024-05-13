@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,7 +32,8 @@ import com.example.theguide.ui.theme.Typography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrimaryTopAppBar(
-    title: String
+    title: String,
+    onBackClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -43,6 +45,17 @@ fun PrimaryTopAppBar(
                 ),
                 color = Color.White
             )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = { onBackClick.invoke() }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back Button",
+                    tint = Color.White
+                )
+            }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary

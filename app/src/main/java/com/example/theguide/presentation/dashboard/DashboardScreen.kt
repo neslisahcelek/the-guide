@@ -16,18 +16,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.theguide.R
 import com.example.theguide.domain.model.Place
 import com.example.theguide.presentation.navigation.Route
-import com.example.theguide.presentation.welcome.WelcomeVM
 import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
@@ -43,7 +39,7 @@ fun DashboardScreen(
             modifier = Modifier.fillMaxSize(),
             topBar = { PrimaryTopAppBar(
                 title = stringResource(id = R.string.dashboard_screen_title),
-                onClick = { navigate.invoke(Route.WelcomeScreen.route) }
+                onBackClick = { navigate.invoke(Route.WelcomeScreen.route) }
             ) }
         ) { values ->
             Column(
