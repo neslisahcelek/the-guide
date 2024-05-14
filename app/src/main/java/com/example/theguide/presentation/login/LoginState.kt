@@ -3,5 +3,5 @@ package com.example.theguide.presentation.login
 data class LoginState(
     val isLoading: Boolean = false,
     val tokenId: String = "",
-    val isLoggedIn: Boolean = true
+    val isLoggedIn: Boolean = false
 )
