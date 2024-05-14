@@ -10,5 +10,6 @@ data class UserEntity(
     val googleTokenId: String,
     val firstName: String,
     val lastName: String,
-    val email: String
+    val email: String,
+    val imageUrl: String
 )

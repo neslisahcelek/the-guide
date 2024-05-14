@@ -2,6 +2,7 @@ package com.example.theguide.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.theguide.data.local.Migration1To2
 import com.example.theguide.data.local.UserDao
 import com.example.theguide.data.local.UserDatabase
 import com.example.theguide.data.manager.LocalUserManagerImpl
@@ -114,7 +115,7 @@ object AppModule {
             application,
             UserDatabase::class.java,
             "user_database"
-        ).build()
+        ).addMigrations(Migration1To2()).build()
     }
 
     @Provides
