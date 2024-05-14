@@ -11,6 +11,8 @@ import com.example.theguide.presentation.dashboard.DashboardScreen
 import com.example.theguide.presentation.dashboard.DashboardVM
 import com.example.theguide.presentation.login.LoginScreen
 import com.example.theguide.presentation.login.LoginVM
+import com.example.theguide.presentation.profile.ProfileScreen
+import com.example.theguide.presentation.profile.ProfileVM
 import com.example.theguide.presentation.topplaces.TopPlacesScreen
 import com.example.theguide.presentation.topplaces.TopPlacesVM
 import com.example.theguide.presentation.welcome.WelcomeScreen
@@ -74,5 +76,16 @@ fun TheGuideNavGraph() {
                 })
         }
 
+        composable(Route.ProfileScreen.route) {
+            val viewModel: ProfileVM = hiltViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            ProfileScreen(
+                action = viewModel::onAction,
+                state = state,
+                navigate = { route ->
+                    navController.navigate(route)
+                })
+        }
     }
 }
