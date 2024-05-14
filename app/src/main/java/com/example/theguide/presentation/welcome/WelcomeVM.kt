@@ -16,10 +16,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -78,17 +80,24 @@ class WelcomeVM @Inject constructor(
     }
 
     private fun getUserInfo() {
-        CoroutineScope(IO).launch(IO) {
-            userDao.getUser().let { userEntity ->
-                Log.d("WelcomeVM", "getUserInfo: ${userEntity.firstName}")
-                _state.update {
-                    it.copy(
-                        userName = userEntity.firstName,
-                    )
+        CoroutineScope(IO).launch {
+            try {
+                val userEntity = userDao.getUser()
+                Log.d("WelcomeVM", "getUserInfo: ${userEntity?.firstName}")
+
+                withContext(Main) {
+                    _state.update {
+                        it.copy(
+                            userName = userEntity?.firstName ?: "",
+                        )
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("WelcomeVM", "Error fetching user: ${e.message}")
             }
         }
     }
+
 
     private fun addRating(placeId: Int, rating: Double) {
         viewModelScope.launch {
