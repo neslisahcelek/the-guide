@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.example.theguide.data.local.UserEntity
 
 @Dao
 interface UserDao {
@@ -14,8 +13,11 @@ interface UserDao {
     @Delete
     suspend fun deleteUser(user: UserEntity)
 
+    @Query("DELETE FROM 'UserEntity'")
+    suspend fun deleteAllUsers()
+
     @Query("SELECT * FROM UserEntity")
-    fun getUser(): UserEntity
+    fun getUser(): UserEntity?
 
     @Query("SELECT * FROM UserEntity WHERE id = :id")
     fun isUserLoggedIn(id: String): Boolean
