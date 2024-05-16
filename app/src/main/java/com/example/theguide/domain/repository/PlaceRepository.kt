@@ -1,6 +1,6 @@
 package com.example.theguide.domain.repository
 
-import com.example.theguide.data.remote.UserInfo
+import com.example.theguide.data.remote.dto.UserInfo
 import com.example.theguide.domain.model.Place
 import com.example.theguide.domain.resource.Resource
 

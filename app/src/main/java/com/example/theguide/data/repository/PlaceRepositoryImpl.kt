@@ -2,7 +2,7 @@ package com.example.theguide.data.repository
 
 import com.example.theguide.data.mapper.toPlaceModel
 import com.example.theguide.data.remote.PlacesAPI
-import com.example.theguide.data.remote.UserInfo
+import com.example.theguide.data.remote.dto.UserInfo
 import com.example.theguide.domain.model.Place
 import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.resource.Resource

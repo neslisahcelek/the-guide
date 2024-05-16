@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theguide.data.local.UserDao
-import com.example.theguide.data.remote.UserInfo
+import com.example.theguide.data.remote.dto.UserInfo
 import com.example.theguide.domain.model.User
 import com.example.theguide.domain.resource.Resource
 import com.example.theguide.domain.usecase.place.CreateUserUseCase

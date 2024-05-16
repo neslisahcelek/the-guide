@@ -3,6 +3,7 @@ package com.example.theguide.data.remote
 import com.example.theguide.data.remote.dto.PlaceDto
 import com.example.theguide.data.remote.dto.UserIdDto
 import com.example.theguide.data.remote.dto.PlaceNameDto
+import com.example.theguide.data.remote.dto.UserInfo
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
