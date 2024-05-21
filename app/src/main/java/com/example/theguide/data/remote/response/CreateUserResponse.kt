@@ -1,9 +1,8 @@
-package com.example.theguide.data.remote.dto
+package com.example.theguide.data.remote.response
 
 import com.squareup.moshi.Json
 
-data class UserIdDto(
-    @Json(name = "user_id") val userId: String,
+data class CreateUserResponse(
     @Json(name = "error") val error: String,
     @Json(name = "message") val message: String
 )
