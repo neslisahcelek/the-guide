@@ -6,7 +6,7 @@ import javax.inject.Inject
 class GetRecommendationUseCase @Inject constructor(
     private val placeRepository: PlaceRepository
 ) {
-    suspend fun execute(userId: Int, recommendationLimit: Int=5) = placeRepository.getRecommendation(
+    suspend fun execute(userId: String, recommendationLimit: Int=5) = placeRepository.getRecommendation(
         userId = userId,
         recommendationLimit = recommendationLimit
     )

@@ -1,9 +1,8 @@
 package com.example.theguide.data.repository
 
-import com.example.theguide.data.mapper.toPlaceModel
+import Recommendation
 import com.example.theguide.data.remote.PlacesAPI
-import com.example.theguide.data.remote.dto.UserInfo
-import com.example.theguide.domain.model.Place
+import com.example.theguide.data.remote.dto.RatingInfo
 import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.resource.Resource
 
@@ -20,13 +19,24 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-    override suspend fun createUser(info: UserInfo): Resource<String> {
+    override suspend fun createUser(userId: String): Resource<String> {
         return try {
-            val userId = placesAPI.createUser(info)
-            Resource.Success(userId.toString())
+            val result = placesAPI.createUser(userId)
+            Resource.Success(result.message)
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Error(e.message ?: "An error occurred (addUser)")
+        }
+    }
+
+    override suspend fun addRating(userId: String, placeId: Int, rating: Double): Resource<String> {
+        val ratingInfo = RatingInfo(userId, placeId, rating)
+        return try {
+            val response = placesAPI.addRating(ratingInfo)
+            Resource.Success(response.message)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (addRating)")
         }
     }
 
@@ -40,13 +50,13 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-    override suspend fun getRecommendation(userId: Int, recommendationLimit: Int): Resource<List<Place>> {
+    override suspend fun getRecommendation(userId: String, recommendationLimit: Int): Resource<List<Recommendation>> {
         return try {
             Resource.Success(
                 placesAPI.getRecommendation(
                     userId = userId,
                     recommendationLimit = recommendationLimit
-                ).toPlaceModel()
+                ).recommendations
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -54,13 +64,5 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-    override suspend fun addRating(userId: Int, placeId: Int, rating: Double): Resource<String> {
-        return try {
-            val response = placesAPI.addRating(userId, placeId, rating)
-            Resource.Success(response)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(e.message ?: "An error occurred (addRating)")
-        }
-    }
+
 }

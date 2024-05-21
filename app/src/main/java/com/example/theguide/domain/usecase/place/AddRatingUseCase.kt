@@ -6,7 +6,7 @@ import javax.inject.Inject
 class AddRatingUseCase @Inject constructor(
     private val placeRepository: PlaceRepository
 ){
-    suspend fun execute(userId: Int, placeId: Int, rating: Double) {
+    suspend fun execute(userId: String, placeId: Int, rating: Double) {
         placeRepository.addRating(userId, placeId, rating)
     }
 }
