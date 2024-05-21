@@ -6,12 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theguide.data.local.UserDao
-import com.example.theguide.data.remote.dto.UserInfo
 import com.example.theguide.domain.model.User
 import com.example.theguide.domain.resource.Resource
 import com.example.theguide.domain.usecase.place.CreateUserUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -72,6 +70,7 @@ class LoginVM @Inject constructor(
                     SetOptions.merge()
                 )
                 .addOnSuccessListener { userReference ->
+                    saveUsertoDb()
                     saveUserToRoom(user)
                     Log.d("db success", "Document written with ID: $userReference")
                 }.addOnFailureListener { e ->
@@ -127,22 +126,13 @@ class LoginVM @Inject constructor(
         }
     }
 
-    private fun saveUser(ref: DocumentReference, user: GoogleUser?) {
-        val userInfo = UserInfo(userName = user?.fullName ?: "")
+    private fun saveUsertoDb() {
+        val tokenId = state.value.tokenId
 
         viewModelScope.launch {
-            val result = createUserUseCase.execute(userInfo)
+            val result = createUserUseCase.execute(tokenId)
             _userId.postValue(result)
             Log.d("LoginVM saveUser", "userID: ${result.data} message: ${result.message}")
-        }
-    }
-
-    private fun saveUserInfo(user: GoogleUser?) {
-        val info = UserInfo("dşdlşd")
-        viewModelScope.launch(IO) {
-            val result = getUserUseCase.execute(info)
-            _userId.postValue(result)
-            Log.d("LoginVM", "data: ${result.data} message: ${result.message}")
         }
     }
 
