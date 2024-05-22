@@ -15,7 +15,6 @@ import com.example.theguide.domain.usecase.appentry.ReadAppEntryUseCase
 import com.example.theguide.domain.usecase.appentry.SaveAppEntryUseCase
 import com.example.theguide.domain.usecase.place.AddRatingUseCase
 import com.example.theguide.domain.usecase.place.CreateUserUseCase
-import com.example.theguide.domain.usecase.place.GetPlaceNameUseCase
 import com.example.theguide.domain.usecase.place.GetRecommendationUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
 import dagger.Module
@@ -51,7 +50,7 @@ object AppModule {
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://0wcwhq0q-8000.euw.devtunnels.ms")
+            .baseUrl("https://senior-design-1d3188c2a52c.herokuapp.com")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
@@ -72,12 +71,6 @@ object AppModule {
     @Provides
     fun provideGetUserUseCase(repository: PlaceRepository): GetUserUseCase {
         return GetUserUseCase(repository)
-    }
-
-    @Singleton
-    @Provides
-    fun provideGetPlaceNameUseCase(repository: PlaceRepository): GetPlaceNameUseCase {
-        return GetPlaceNameUseCase(repository)
     }
 
     @Singleton
