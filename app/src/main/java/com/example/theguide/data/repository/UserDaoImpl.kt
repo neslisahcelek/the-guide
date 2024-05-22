@@ -11,7 +11,5 @@ class UserDaoImpl @Inject constructor(private val userDao: UserDao) : UserDao {
 
     override suspend fun deleteAllUsers() = userDao.deleteAllUsers()
 
-    override fun getUser(): UserEntity? = userDao.getUser()
-
-    override fun isUserLoggedIn(id: String): Boolean = userDao.isUserLoggedIn(id)
+    override suspend fun getUser(): UserEntity? = userDao.getUser()
 }

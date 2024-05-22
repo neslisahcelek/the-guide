@@ -9,16 +9,6 @@ import com.example.theguide.domain.resource.Resource
 class PlaceRepositoryImpl constructor(
     private val placesAPI: PlacesAPI
 ) : PlaceRepository {
-      override suspend fun getUserId(): Resource<String> {
-        return try {
-            val response = placesAPI.getUserId()
-            Resource.Success(response)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(e.message ?: "An error occurred (getUserId)")
-        }
-    }
-
     override suspend fun createUser(userId: String): Resource<String> {
         return try {
             val result = placesAPI.createUser(userId)
@@ -37,16 +27,6 @@ class PlaceRepositoryImpl constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Error(e.message ?: "An error occurred (addRating)")
-        }
-    }
-
-    override suspend fun getPlaceName(): Resource<String> {
-        return try {
-            val response = placesAPI.getPlaceName()
-            Resource.Success(response.placeName)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(e.message ?: "An error occurred (getPlaceName)")
         }
     }
 

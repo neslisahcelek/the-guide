@@ -16,9 +16,6 @@ interface UserDao {
     @Query("DELETE FROM 'UserEntity'")
     suspend fun deleteAllUsers()
 
-    @Query("SELECT * FROM UserEntity")
-    fun getUser(): UserEntity?
-
-    @Query("SELECT * FROM UserEntity WHERE id = :id")
-    fun isUserLoggedIn(id: String): Boolean
+    @Query("SELECT * FROM UserEntity LIMIT 1")
+    suspend fun getUser(): UserEntity?
 }
