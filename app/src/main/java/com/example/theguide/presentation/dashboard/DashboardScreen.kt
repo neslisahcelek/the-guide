@@ -1,5 +1,6 @@
 package com.example.theguide.presentation.dashboard
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -34,6 +36,9 @@ fun DashboardScreen(
     state: DashboardState = DashboardState(),
     navigate: (String) -> Unit = {}
 ) {
+    LaunchedEffect(key1 = Unit) {
+        action.invoke(DashboardAction.LoadDashboard)
+    }
     Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -56,15 +61,15 @@ fun DashboardScreen(
                 ) {
                     items(state.places) { place ->
                         RecommendationCard(
-                            image = place.imageUrl,
-                            name = place.name,
+                            image = place.photos[0],
+                            name = place.placeName,
                             rating = place.rating.toString(),
-                            onClick = {  }
+                            url = place.mapsUrl
                         )
                     }
                 }
                 Button(
-                    onClick = { navigate.invoke(Route.TopPlacesScreen.route) },
+                    onClick = { navigate.invoke(Route.ProfileScreen.route) },
                 ) {
                     Text(stringResource(id = R.string.top_places_screen_title))
                 }
@@ -80,24 +85,7 @@ fun DashboardScreenPreview() {
         DashboardScreen(
             state = DashboardState(
                 places = listOf(
-                    Place(
-                        id = 1,
-                        name = "Walkers",
-                        rating = 4.5,
-                        imageUrl = R.drawable.walkers.toString(),
-                    ),
-                    Place(
-                        id = 3,
-                        name = "Restaurant",
-                        rating = 4.5,
-                        imageUrl = R.drawable.bg.toString(),
-                    ),
-                    Place(
-                        id = 2,
-                        name = "Understone",
-                        rating = 4.5,
-                        imageUrl = R.drawable.understone.toString(),
-                    )
+
                 )
             )
         )
