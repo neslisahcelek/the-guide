@@ -3,20 +3,19 @@ package com.example.theguide.presentation.welcome
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.theguide.R
 import com.example.theguide.data.local.UserDao
 import com.example.theguide.domain.model.Place
-import com.example.theguide.domain.resource.Resource
 import com.example.theguide.domain.usecase.appentry.AppEntryUseCases
 import com.example.theguide.domain.usecase.place.AddRatingUseCase
-import com.example.theguide.domain.usecase.place.GetUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -27,16 +26,37 @@ import javax.inject.Inject
 @HiltViewModel
 class WelcomeVM @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases,
-    private val getUserUseCase: GetUserUseCase,
     private val addRatingUseCase: AddRatingUseCase,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private var savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _state = MutableStateFlow(WelcomeState())
     val state = _state.asStateFlow()
 
-    private val _userId = MutableLiveData<Resource<String>>()
-    val userId: LiveData<Resource<String>>
-        get() = _userId
+    @Volatile
+    private var isUserInfoFetched = false
+
+    @Volatile
+    private var isFetchingUserInfo = false
+
+    fun loadUserInfoIfNeeded() {
+        if (isUserInfoFetched || isFetchingUserInfo) return
+
+        synchronized(this) {
+            if (isUserInfoFetched || isFetchingUserInfo) return
+            isFetchingUserInfo = true
+        }
+
+        viewModelScope.launch {
+            try {
+                fetchUserInfo()
+            } finally {
+                synchronized(this@WelcomeVM) {
+                    isFetchingUserInfo = false
+                }
+            }
+        }
+    }
 
     init {
         val placeList = listOf(
@@ -67,34 +87,36 @@ class WelcomeVM @Inject constructor(
                 currentPlaceIndex = 0
             )
         }
+    }
 
-        getUserInfo()
+    private suspend fun fetchUserInfo() {
+        try {
+            val userEntity = withContext(Dispatchers.IO) {
+                userDao.getUser()
+            }
+            Log.d("WelcomeVM", "GetUserInfo: ${userEntity?.firstName}")
+
+            withContext(Dispatchers.Main) {
+                _state.update {
+                    it.copy(
+                        userName = userEntity?.firstName ?: "",
+                        userId = userEntity?.googleTokenId ?: ""
+                    )
+                }
+                synchronized(this@WelcomeVM) {
+                    isUserInfoFetched = true
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("WelcomeVM", "Error fetching user: ${e.message}")
+        }
     }
 
     fun onAction(action: WelcomeAction) {
         when (action) {
             is WelcomeAction.SaveAppEntry -> saveAppEntry()
             is WelcomeAction.RatePlace -> addRating(action.placeId, action.rating)
-            WelcomeAction.getUserInfo -> getUserInfo()
-        }
-    }
-
-    private fun getUserInfo() {
-        CoroutineScope(IO).launch {
-            try {
-                val userEntity = userDao.getUser()
-                Log.d("WelcomeVM", "getUserInfo: ${userEntity?.firstName}")
-
-                withContext(Main) {
-                    _state.update {
-                        it.copy(
-                            userName = userEntity?.firstName ?: "",
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("WelcomeVM", "Error fetching user: ${e.message}")
-            }
+            WelcomeAction.GetUserInfo -> {}
         }
     }
 
@@ -102,7 +124,7 @@ class WelcomeVM @Inject constructor(
     private fun addRating(placeId: Int, rating: Double) {
         viewModelScope.launch {
             addRatingUseCase.execute(
-                userId = userId.value?.data?.toInt() ?: 0,
+                userId = state.value.userId,
                 placeId = placeId,
                 rating = rating
             )

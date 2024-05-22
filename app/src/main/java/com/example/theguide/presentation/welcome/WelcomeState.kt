@@ -14,4 +14,5 @@ data class WelcomeState (
     var currentPlaceIndex: Int = 0,
     var isListCompleted: Boolean = false,
     var userName: String = "",
+    var userId: String = ""
 )
