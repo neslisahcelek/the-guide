@@ -22,9 +22,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.theguide.presentation.dashboard.DashboardScreen
 import com.example.theguide.presentation.dashboard.DashboardVM
-import com.example.theguide.presentation.login.GoogleAuthUIClient
-import com.example.theguide.presentation.login.SignInScreen
-import com.example.theguide.presentation.login.SignInVM
+import com.example.theguide.presentation.signin.GoogleAuthUIClient
+import com.example.theguide.presentation.signin.SignInScreen
+import com.example.theguide.presentation.signin.SignInVM
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.presentation.profile.ProfileScreen
 import com.example.theguide.presentation.profile.ProfileVM
