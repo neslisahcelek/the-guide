@@ -17,6 +17,10 @@ import com.example.theguide.domain.usecase.place.AddRatingUseCase
 import com.example.theguide.domain.usecase.place.CreateUserUseCase
 import com.example.theguide.domain.usecase.place.GetRecommendationUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
+import com.example.theguide.domain.usecase.wishlist.AddToWishListUseCase
+import com.example.theguide.domain.usecase.wishlist.GetWishListUseCase
+import com.example.theguide.domain.usecase.wishlist.RemoveFromWishListUseCase
+import com.example.theguide.domain.usecase.wishlist.WishListUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -90,6 +94,16 @@ object AppModule {
     fun provideAddRatingUseCase(repository: PlaceRepository): AddRatingUseCase {
         return AddRatingUseCase(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideWishListUseCases(
+        repository: PlaceRepository
+    ) = WishListUseCases(
+        getWishListUseCase = GetWishListUseCase(repository),
+        addToWishListUseCase = AddToWishListUseCase(repository),
+        removeFromWishListUseCase = RemoveFromWishListUseCase(repository)
+    )
 
     @Provides
     @Singleton
