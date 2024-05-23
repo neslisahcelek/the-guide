@@ -1,4 +1,4 @@
-package com.example.theguide.presentation.login
+package com.example.theguide.presentation.signin
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -40,6 +40,7 @@ import com.example.theguide.R
 import com.example.theguide.ui.theme.AlegreyaFontFamily
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.Typography
+import com.example.theguide.ui.theme.bg
 import com.example.theguide.ui.theme.bg1
 import com.example.theguide.ui.theme.bg2
 import com.example.theguide.ui.theme.softBlurOrange
@@ -52,20 +53,15 @@ fun SignInScreen(
 ) {
     LaunchedEffect(key1 = state.signInError) {
         state.signInError?.let {
-            Log.d("SignIn", "Error: $it")
+            Log.d("SignInScreen", "Error: $it")
         }
     }
     Surface(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .gradientBackground(
-                    listOf(
-                        bg1,
-                        bg2,
-                        softOrange,
-                        softBlurOrange
-                    )
+                .background(
+                    color = bg2
                 )
         ) {
             /*
@@ -98,7 +94,7 @@ fun SignInScreen(
                     text = stringResource(id = R.string.login_screen_title),
                     style = Typography.headlineMedium.copy(
                         fontSize = 35.sp,
-                        fontWeight = FontWeight(350),
+                        fontWeight = FontWeight(450),
                         fontFamily = AlegreyaFontFamily
                     ),
                     color = Color.White
@@ -117,7 +113,7 @@ fun SignInScreen(
                     contentPadding = PaddingValues(6.dp),
                     border = BorderStroke(
                         width = 1.dp,
-                        color = Color(0xFF747775),
+                        color = bg,
                     )
                 ) {
                     Box(
@@ -145,7 +141,12 @@ fun SignInScreen(
 fun Modifier.gradientBackground(colors: List<Color>): Modifier = this
     .background(
         brush = Brush.linearGradient(
-            colors = colors
+            colors = listOf(
+                bg1,
+                bg2,
+                softOrange,
+                softBlurOrange
+            )
         )
     )
 

@@ -1,4 +1,4 @@
-package com.example.theguide.presentation.login
+package com.example.theguide.presentation.signin
 
 import com.example.theguide.domain.model.User
 

@@ -1,4 +1,4 @@
-package com.example.theguide.presentation.login
+package com.example.theguide.presentation.signin
 
 import android.content.Intent
 import android.content.IntentSender
@@ -38,7 +38,8 @@ class GoogleAuthUIClient(
         val googleCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
         return try {
             val user = auth.signInWithCredential(googleCredential).await().user
-            val userAdditionalInfo = auth.signInWithCredential(googleCredential).await().additionalUserInfo
+            val userAdditionalInfo =
+                auth.signInWithCredential(googleCredential).await().additionalUserInfo
             val profile = userAdditionalInfo?.profile
 
             val firstName = profile?.get("given_name") as? String ?: ""
@@ -80,7 +81,8 @@ class GoogleAuthUIClient(
         User(
             id = uid,
             email = email ?: "",
-            displayName = displayName ?: "",
+            displayName = displayName?.split(" ")
+                ?.joinToString(" ") { it.replaceFirstChar(Char::titlecaseChar) } ?: "",
             phoneNumber = phoneNumber ?: "",
             picture = photoUrl?.toString() ?: ""
         )

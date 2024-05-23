@@ -1,33 +1,40 @@
-package com.example.theguide.presentation.login
+package com.example.theguide.presentation.signin
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.theguide.domain.resource.Resource
+import androidx.lifecycle.viewModelScope
+import com.example.theguide.domain.usecase.place.CreateUserUseCase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInVM @Inject constructor() : ViewModel() {
+class SignInVM @Inject constructor(
+    private val createUserUseCase: CreateUserUseCase,
+) : ViewModel() {
     private val userCollection = Firebase.firestore.collection("users")
 
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
-    private val _userId = MutableLiveData<Resource<String>>()
-    val userId: LiveData<Resource<String>>
-        get() = _userId
-
     fun onSignInResult(signInResult: SignInResult) {
-        _state.update {
-            it.copy(
-                signInError = signInResult.errorMessage,
-                isSignInSuccessful = signInResult.data != null
+        val userData = signInResult.data
+        val signInError = signInResult.errorMessage
+
+        if (userData != null) {
+            Log.d("SignInVM", "Userdata not null: ${userData.id}")
+            saveUserToDb(userData.id)
+        }
+
+        _state.update { currentState ->
+            currentState.copy(
+                signInError = signInError,
+                isSignInSuccessful = userData != null
             )
         }
     }
@@ -35,6 +42,14 @@ class SignInVM @Inject constructor() : ViewModel() {
     fun resetState() {
         _state.update {
             SignInState()
+        }
+    }
+
+    private fun saveUserToDb(tokenId: String) {
+        Log.d("SignInVM saveUser", "tokenId: $tokenId")
+        viewModelScope.launch {
+            val result = createUserUseCase.execute(tokenId)
+            Log.d("SignInVM saveUser", "userID: ${result.data} message: ${result.message}")
         }
     }
 
@@ -114,16 +129,6 @@ class SignInVM @Inject constructor() : ViewModel() {
                     }
                 }
             }
-        }
-    }
-
-    private fun saveUsertoDb() {
-        val tokenId = state.value.tokenId
-
-        viewModelScope.launch {
-            val result = createUserUseCase.execute(tokenId)
-            _userId.postValue(result)
-            Log.d("SignInVM saveUser", "userID: ${result.data} message: ${result.message}")
         }
     }
 
