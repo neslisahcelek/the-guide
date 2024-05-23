@@ -30,7 +30,7 @@ import com.example.theguide.presentation.profile.ProfileScreen
 import com.example.theguide.presentation.profile.ProfileVM
 import com.example.theguide.presentation.topplaces.TopPlacesScreen
 import com.example.theguide.presentation.topplaces.TopPlacesVM
-import com.example.theguide.presentation.welcome.WelcomeScreen
+import com.example.theguide.presentation.welcome.views.WelcomeScreen
 import com.example.theguide.presentation.welcome.WelcomeVM
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.google.android.gms.auth.api.identity.Identity
@@ -41,7 +41,6 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     val googleAuthUIClient by lazy {
         GoogleAuthUIClient(
-            context = applicationContext,
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
     }
@@ -97,7 +96,7 @@ class MainActivity : ComponentActivity() {
 
                             LaunchedEffect(key1 = state.isSignInSuccessful) {
                                 if (state.isSignInSuccessful) {
-                                    Log.d("MainActivity", "isSignInSuccessful")
+                                    Log.d("MainActivity", "SignInSuccessful")
                                     navController.navigate(Route.WelcomeScreen.route)
                                     viewModel.resetState()
                                 }
@@ -122,16 +121,13 @@ class MainActivity : ComponentActivity() {
                             val viewModel: WelcomeVM = hiltViewModel()
                             val state by viewModel.state.collectAsStateWithLifecycle()
 
-                            LaunchedEffect(Unit) {
-                                viewModel.loadUserInfoIfNeeded()
-                            }
-
                             WelcomeScreen(
                                 action = viewModel::onAction,
                                 navigate = { route ->
                                     navController.navigate(route)
                                 },
-                                state = state
+                                state = state,
+                                user = googleAuthUIClient.getSignedInUser() ?: return@composable
                             )
                         }
 
@@ -144,7 +140,9 @@ class MainActivity : ComponentActivity() {
                                 state = state,
                                 navigate = { route ->
                                     navController.navigate(route)
-                                })
+                                },
+                                user = googleAuthUIClient.getSignedInUser()
+                            )
                         }
 
                         composable(Route.TopPlacesScreen.route) {
@@ -169,13 +167,14 @@ class MainActivity : ComponentActivity() {
                                 navigate = { route ->
                                     navController.navigate(route)
                                 },
-                                user = googleAuthUIClient.getSignedInUser()
-                            ) {
-                                lifecycleScope.launch {
-                                    googleAuthUIClient.signOut()
-                                    navController.navigate(Route.LoginScreen.route)
+                                user = googleAuthUIClient.getSignedInUser(),
+                                onSignOut = {
+                                    lifecycleScope.launch {
+                                        googleAuthUIClient.signOut()
+                                        navController.navigate(Route.LoginScreen.route)
+                                    }
                                 }
-                            }
+                            )
                         }
                     }
                 }

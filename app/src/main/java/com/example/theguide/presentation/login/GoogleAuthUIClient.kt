@@ -1,6 +1,5 @@
 package com.example.theguide.presentation.login
 
-import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import com.example.theguide.domain.model.User
@@ -14,12 +13,11 @@ import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException
 
 class GoogleAuthUIClient(
-    private val context: Context,
     private val oneTapClient: SignInClient,
 ) {
     private val auth = Firebase.auth
 
-    suspend fun signIn() : IntentSender? {
+    suspend fun signIn(): IntentSender? {
         val result = try {
             oneTapClient.beginSignIn(
                 buildSignInRequest()
@@ -41,16 +39,22 @@ class GoogleAuthUIClient(
         return try {
             val user = auth.signInWithCredential(googleCredential).await().user
             val userAdditionalInfo = auth.signInWithCredential(googleCredential).await().additionalUserInfo
+            val profile = userAdditionalInfo?.profile
+
+            val firstName = profile?.get("given_name") as? String ?: ""
+
             SignInResult(
                 data = user?.run {
                     User(
                         id = user.uid,
                         email = user.email ?: "",
-                        firstName = user.displayName ?: "",
+                        displayName = firstName,
+                        phoneNumber = user.phoneNumber ?: "",
                         picture = user.photoUrl?.toString() ?: ""
                     )
                 },
-                errorMessage = "")
+                errorMessage = ""
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is CancellationException) {
@@ -76,7 +80,8 @@ class GoogleAuthUIClient(
         User(
             id = uid,
             email = email ?: "",
-            firstName = displayName ?: "",
+            displayName = displayName ?: "",
+            phoneNumber = phoneNumber ?: "",
             picture = photoUrl?.toString() ?: ""
         )
     }
