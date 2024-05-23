@@ -44,5 +44,32 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
+    override suspend fun addToWishList(userId: String, placeId: Int): Resource<String> {
+        return try {
+            Resource.Success(placesAPI.addToWishList(userId, placeId).message)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (addToWishList)")
+        }
+    }
+
+    override suspend fun removeFromWishList(userId: String, placeId: Int): Resource<String> {
+        return try {
+            Resource.Success(placesAPI.removeFromWishList(userId, placeId).message)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (removeFromWishList)")
+        }
+    }
+
+    override suspend fun getWishList(userId: String): Resource<List<Int>> {
+        return try {
+            Resource.Success(placesAPI.getWishList(userId).wishList)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message ?: "An error occurred (getWishList)")
+        }
+    }
+
 
 }
