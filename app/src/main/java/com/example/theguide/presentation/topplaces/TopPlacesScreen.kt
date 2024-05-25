@@ -1,5 +1,6 @@
 package com.example.theguide.presentation.topplaces
 
+import Recommendation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,12 +25,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.theguide.R
-import com.example.theguide.domain.model.Place
 import com.example.theguide.presentation.navigation.Route
-import com.example.theguide.presentation.welcome.CategoryRow
+import com.example.theguide.presentation.welcome.views.CategoryRow
 import com.example.theguide.ui.component.PrimaryTopAppBar
-import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
+import com.example.theguide.util.Util
 
 @Composable
 fun TopPlacesScreen(
@@ -90,26 +89,7 @@ fun TopPlacesScreenPreview() {
     TheGuideTheme {
         TopPlacesScreen(
             state = TopPlacesState(
-                topPlaces = listOf(
-                    Place(
-                        id = 2,
-                        name = "Understone",
-                        rating = 4.5,
-                        imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s",
-                    ),
-                    Place(
-                        id = 1,
-                        name = "Walkers",
-                        rating = 4.5,
-                        imageUrl = "https://lh3.googleusercontent.com/p/AF1QipP5WCtkTdnMTOPErh_wT_2mvaoGvxGvkqMajlvl=s1360-w1360-h1020-rw",
-                    ),
-                    Place(
-                        id = 3,
-                        name = "Restaurant",
-                        rating = 4.5,
-                        imageUrl = "https://lh3.googleusercontent.com/places/ANXAkqF4Zu9H-23naAAe8lm4du88xkuNIhp-uBF-MSWb03-bKYz6uXR0_NDiDZnkgSIJ_Uxl2ctJ85TACMuLVWVTzMnaeCws6DamgM4=s1600-w400",
-                    )
-                )
+                topPlaces = Util.getPlaceList()
             )
         )
     }
