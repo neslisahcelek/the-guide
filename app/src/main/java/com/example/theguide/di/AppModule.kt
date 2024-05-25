@@ -16,7 +16,7 @@ import com.example.theguide.domain.usecase.appentry.SaveAppEntryUseCase
 import com.example.theguide.domain.usecase.place.AddRatingUseCase
 import com.example.theguide.domain.usecase.place.CreateUserUseCase
 import com.example.theguide.domain.usecase.place.GetRecommendationUseCase
-import com.example.theguide.domain.usecase.place.GetTop5UseCase
+import com.example.theguide.domain.usecase.place.GetTopPlacesUseCase
 import com.example.theguide.domain.usecase.place.GetUserUseCase
 import com.example.theguide.domain.usecase.wishlist.AddToWishListUseCase
 import com.example.theguide.domain.usecase.wishlist.GetWishListUseCase
@@ -108,8 +108,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGetTop5UseCase(repository: PlaceRepository): GetTop5UseCase {
-        return GetTop5UseCase(repository)
+    fun provideGetTop5UseCase(repository: PlaceRepository): GetTopPlacesUseCase {
+        return GetTopPlacesUseCase(repository)
     }
 
     @Provides

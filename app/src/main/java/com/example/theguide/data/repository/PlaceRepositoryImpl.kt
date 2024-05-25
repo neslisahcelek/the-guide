@@ -7,7 +7,7 @@ import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.resource.Resource
 
-class PlaceRepositoryImpl constructor(
+class PlaceRepositoryImpl(
     private val placesAPI: PlacesAPI
 ) : PlaceRepository {
     override suspend fun createUser(userId: String): Resource<String> {
@@ -72,7 +72,7 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-    override suspend fun getTop5(): Resource<List<PlaceModel>> {
+    override suspend fun getTopPlaces(): Resource<List<PlaceModel>> {
         return try {
             Resource.Success(
                 placesAPI.getTop5().toPlaceModelList()
