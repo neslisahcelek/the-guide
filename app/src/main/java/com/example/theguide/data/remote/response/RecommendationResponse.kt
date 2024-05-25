@@ -6,8 +6,12 @@ data class RecommendationResponse(
 )
 
 data class Recommendation(
+    @field:Json(name = "id")
+    val id: Int,
     @field:Json(name = "name")
     val placeName: String,
+    @field:Json(name = "expected_score")
+    val expectedScore: Double,
     @field:Json(name = "address")
     val address: String,
     @field:Json(name = "opening_hours")
