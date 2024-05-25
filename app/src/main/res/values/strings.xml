@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">The Guide</string>
     <string name="login_screen_title">Giriş yap,\nŞehrini keşfetmeye başla</string>
-    <string name="welcome_screen_title">Hoşgeldin, %1$s!</string>
+    <string name="welcome_screen_title">Hoşgeldin %1$s!</string>
     <string name="dashboard_screen_title">Senin İçin Önerilenler</string>
     <string name="card_title">Profilinle %90 Uyumlu</string>
     <string name="top_places_screen_title">Şehrinin En İyileri</string>
@@ -11,4 +11,11 @@
         şehrinin en popüler mekanlarına puan vermelisin.</string>
     <string name="rate_card_question">Bu mekana kaç puan verirdin?</string>
     <string name="rate_card_button">Puan Ver</string>
+    <string name="profile_screen_title">Profilim</string>
+    <string name="signup_button">Çıkış Yap</string>
+    <string name="profile_city">Şehir</string>
+    <string name="profile_email">Email</string>
+    <string name="wishlist_screen_title">Gitmek İstediklerin</string>
+    <string name="wishlist_empty">Listende mekan bulunmamaktadır. \nİstersen, Senin İçin Önerilenler sayfasına gidip mekanları inceleyebilir ve gitmek istediğin yerleri kaydedebilirsin.</string>
+    <string name="wishlist_button">Önerilerine Göz At</string>
 </resources>
