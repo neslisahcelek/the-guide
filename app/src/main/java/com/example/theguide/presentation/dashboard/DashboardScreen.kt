@@ -29,6 +29,7 @@ import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
+import com.example.theguide.util.Util
 
 @Composable
 fun DashboardScreen(
@@ -66,19 +67,19 @@ fun DashboardScreen(
                     items(state.places) { place ->
                         RecommendationCard(
                             place = place,
-                            onAddToWishList = { placeId ->
+                            onAddToWishList = {
                                 action.invoke(
                                     DashboardAction.AddToWishList(
                                         userId = user?.id,
-                                        placeId = placeId
+                                        place = place
                                     )
                                 )
                             },
-                            onRemoveFromWishList = { placeId ->
+                            onRemoveFromWishList = {
                                 action.invoke(
                                     DashboardAction.RemoveFromWishList(
                                         userId = user?.id,
-                                        placeId = placeId
+                                        place = place
                                     )
                                 )
                             }
@@ -88,7 +89,7 @@ fun DashboardScreen(
                 Button(
                     onClick = { navigate.invoke(Route.ProfileScreen.route) },
                 ) {
-                    Text(stringResource(id = R.string.top_places_screen_title))
+                    Text("Profile")
                 }
             }
         }
@@ -101,46 +102,7 @@ fun DashboardScreenPreview() {
     TheGuideTheme {
         DashboardScreen(
             state = DashboardState(
-                places = listOf(
-                    Recommendation(
-                        id = 1,
-                        placeName = "Walkers",
-                        address = "Kültür",
-                        mapsUrl = "https://www.google.com/maps/search/?api=1&query=36.8465237%2C30.7597125&query_place_id=ChIJ91Ez--ibwxQRFdcL4FiFLNc",
-                        rating = 4.5,
-                        photos = listOf("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s"),
-                        openingHours = listOf(
-                            "Monday: 9:00 AM – 5:00 PM",
-                            "Tuesday: 9:00 AM – 5:00 PM",
-                            "Wednesday: 9:00 AM – 5:00 PM",
-                            "Thursday: 9:00 AM – 5:00 PM",
-                            "Friday: 9:00 AM – 5:00 PM",
-                            "Saturday: 9:00 AM – 5:00 PM",
-                            "Sunday: 9:00 AM – 5:00 PM"
-                        ),
-                        types = listOf("Cafe"),
-                        reviews = listOf()
-                    ),
-                    Recommendation(
-                        id = 2,
-                        placeName = "Restaurant",
-                        address = "Kültür",
-                        mapsUrl = "https://www.google.com/maps/search/?api=1&query=36.8465237%2C30.7597125&query_place_id=ChIJ91Ez--ibwxQRFdcL4FiFLNc",
-                        rating = 3.2,
-                        photos = listOf("https://lh3.googleusercontent.com/places/ANXAkqF4Zu9H-23naAAe8lm4du88xkuNIhp-uBF-MSWb03-bKYz6uXR0_NDiDZnkgSIJ_Uxl2ctJ85TACMuLVWVTzMnaeCws6DamgM4=s1600-w400"),
-                        openingHours = listOf(
-                            "Monday: 9:00 AM – 5:00 PM",
-                            "Tuesday: 9:00 AM – 5:00 PM",
-                            "Wednesday: 9:00 AM – 5:00 PM",
-                            "Thursday: 9:00 AM – 5:00 PM",
-                            "Friday: 9:00 AM – 5:00 PM",
-                            "Saturday: 9:00 AM – 5:00 PM",
-                            "Sunday: 9:00 AM – 5:00 PM"
-                        ),
-                        types = listOf("Cafe"),
-                        reviews = listOf()
-                    )
-                )
+                places = Util.getPlaceList()
             )
         )
     }

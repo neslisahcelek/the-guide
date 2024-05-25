@@ -5,10 +5,19 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.domain.model.User
 import com.example.theguide.domain.usecase.place.GetRecommendationUseCase
 import com.example.theguide.domain.usecase.wishlist.WishListUseCases
+import com.example.theguide.util.Util
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,61 +27,60 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardVM @Inject constructor(
     private val getRecommendationUseCase: GetRecommendationUseCase,
-    private var savedStateHandle: SavedStateHandle,
-    private val wishListUseCases: WishListUseCases
-    ) : ViewModel() {
+) : ViewModel() {
     private val _state = MutableStateFlow(DashboardState())
     val state = _state.asStateFlow()
+
+    private val wishListCollection = Firebase.firestore.collection("users")
 
     fun onAction(action: DashboardAction) {
         when (action) {
             is DashboardAction.LoadDashboard -> {
                 loadDashboard()
-                //getRecommendations(user = action.user)
+                getRecommendations(user = action.user)
             }
-            is DashboardAction.AddToWishList -> addToWishList(action.userId, action.placeId)
-            is DashboardAction.RemoveFromWishList -> removeFromWishList(action.userId, action.placeId)
+
+            is DashboardAction.AddToWishList -> addToWishList(action.userId, action.place)
+            is DashboardAction.RemoveFromWishList -> removeFromWishList(action.userId, action.place)
         }
     }
 
-    private fun removeFromWishList(userId: String?, placeId: Int) {
-        viewModelScope.launch {
-            val result = wishListUseCases.removeFromWishListUseCase.execute(
-                userId = userId ?: "",
-                placeId = placeId
-            )
-            if (result.data != null) {
-                Log.d("removeFromWishList", "Success: ${result.data}")
-            } else {
-                Log.d("removeFromWishList", "Error $result.message ?:")
+    private fun removeFromWishList(userId: String?, wish: PlaceModel) {
+        if (userId == null) {
+            Log.d("removeFromWishList error", "userId is null")
+            return
+        }
+        val document =
+            wishListCollection.document(userId).collection("wishlist").document(wish.id.toString())
+
+        CoroutineScope(IO).launch {
+            try {
+                Tasks.await(document.delete())
+            } catch (exception: Exception) {
+                Log.d("removeFromWishList", "Error deleting document: ", exception)
             }
         }
-        _state.update {
-            it.copy(
-                wishList = it.wishList - placeId
-            )
-        }
-        Log.d("removeFromWishList", "userId: $userId, placeId: $placeId list: ${_state.value.wishList}")
     }
 
-    private fun addToWishList(userId: String?, placeId: Int) {
-        viewModelScope.launch {
-            val result = wishListUseCases.addToWishListUseCase.execute(
-                userId = userId ?: "",
-                placeId = placeId
-            )
-            if (result.data != null) {
-                Log.d("addToWishListUseCase", "Success: ${result.data}")
-            } else {
-                Log.d("addToWishListUseCase", "Error $result.message ?:")
+    private fun addToWishList(userId: String?, wish: PlaceModel) {
+        if (userId == null) {
+            Log.d("addToWishList error", "userId is null")
+            return
+        }
+        val document =
+            wishListCollection.document(userId).collection("wishlist").document(wish.id.toString())
+        CoroutineScope(IO).launch {
+            try {
+                Tasks.await(
+                    document.set(
+                        wish.toMap(),
+                        SetOptions.merge()
+                    )
+                )
+            } catch (exception: Exception) {
+                Log.d("addToWishList", "Error adding document: ", exception)
             }
         }
-        _state.update {
-            it.copy(
-                wishList = it.wishList + placeId
-            )
-        }
-        Log.d("addToWishList", "userId: $userId, placeId: $placeId list: ${_state.value.wishList}")
     }
 
     private fun getRecommendations(user: User?) {
@@ -102,52 +110,7 @@ class DashboardVM @Inject constructor(
     }
 
     private fun loadDashboard() {
-        val placeList = listOf(
-            Recommendation(
-                id = 1,
-                placeName = "Walkers",
-                address = "Kültür",
-                mapsUrl = "https://www.google.com/maps/search/?api=1&query=36.8465237%2C30.7597125&query_place_id=ChIJ91Ez--ibwxQRFdcL4FiFLNc",
-                rating = 4.5,
-                photos = listOf("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s"),
-                openingHours = listOf("Monday: 9:00 AM – 5:00 PM", "Tuesday: 9:00 AM – 5:00 PM", "Wednesday: 9:00 AM – 5:00 PM", "Thursday: 9:00 AM – 5:00 PM", "Friday: 9:00 AM – 5:00 PM", "Saturday: 9:00 AM – 5:00 PM", "Sunday: 9:00 AM – 5:00 PM"),
-                types = listOf("Cafe"),
-                reviews = listOf()
-            ),
-            Recommendation(
-                id = 2,
-                placeName = "Köfteci Cihat",
-                address = "Kültür",
-                mapsUrl = "https://www.google.com/maps/search/?api=1&query=36.8465237%2C30.7597125&query_place_id=ChIJ91Ez--ibwxQRFdcL4FiFLNc",
-                rating = 3.2,
-                photos = listOf("https://lh3.googleusercontent.com/places/ANXAkqF4Zu9H-23naAAe8lm4du88xkuNIhp-uBF-MSWb03-bKYz6uXR0_NDiDZnkgSIJ_Uxl2ctJ85TACMuLVWVTzMnaeCws6DamgM4=s1600-w400",),
-                openingHours = listOf("Monday: 9:00 AM – 5:00 PM", "Tuesday: 9:00 AM – 5:00 PM", "Wednesday: 9:00 AM – 5:00 PM", "Thursday: 9:00 AM – 5:00 PM", "Friday: 9:00 AM – 5:00 PM", "Saturday: 9:00 AM – 5:00 PM", "Sunday: 9:00 AM – 5:00 PM"),
-                types = listOf("Cafe"),
-                reviews = listOf()
-            ),
-            Recommendation(
-                id = 3,
-                placeName = "Köfteci Cihat",
-                address = "Kültür",
-                mapsUrl = "https://www.google.com/maps/search/?api=1&query=36.8465237%2C30.7597125&query_place_id=ChIJ91Ez--ibwxQRFdcL4FiFLNc",
-                rating = 3.2,
-                photos = listOf("https://lh3.googleusercontent.com/places/ANXAkqF4Zu9H-23naAAe8lm4du88xkuNIhp-uBF-MSWb03-bKYz6uXR0_NDiDZnkgSIJ_Uxl2ctJ85TACMuLVWVTzMnaeCws6DamgM4=s1600-w400",),
-                openingHours = listOf("Monday: 9:00 AM – 5:00 PM", "Tuesday: 9:00 AM – 5:00 PM", "Wednesday: 9:00 AM – 5:00 PM", "Thursday: 9:00 AM – 5:00 PM", "Friday: 9:00 AM – 5:00 PM", "Saturday: 9:00 AM – 5:00 PM", "Sunday: 9:00 AM – 5:00 PM"),
-                types = listOf("Cafe"),
-                reviews = listOf()
-            ),
-            Recommendation(
-                id = 4,
-                placeName = "Köfteci Cihat",
-                address = "Kültür",
-                mapsUrl = "https://www.google.com/maps/search/?api=1&query=36.8465237%2C30.7597125&query_place_id=ChIJ91Ez--ibwxQRFdcL4FiFLNc",
-                rating = 3.2,
-                photos = listOf("https://lh3.googleusercontent.com/places/ANXAkqF4Zu9H-23naAAe8lm4du88xkuNIhp-uBF-MSWb03-bKYz6uXR0_NDiDZnkgSIJ_Uxl2ctJ85TACMuLVWVTzMnaeCws6DamgM4=s1600-w400",),
-                openingHours = listOf("Monday: 9:00 AM – 5:00 PM", "Tuesday: 9:00 AM – 5:00 PM", "Wednesday: 9:00 AM – 5:00 PM", "Thursday: 9:00 AM – 5:00 PM", "Friday: 9:00 AM – 5:00 PM", "Saturday: 9:00 AM – 5:00 PM", "Sunday: 9:00 AM – 5:00 PM"),
-                types = listOf("Cafe"),
-                reviews = listOf()
-            )
-        )
+        val placeList = Util.getPlaceList()
         _state.update {
             it.copy(
                 places = placeList

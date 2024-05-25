@@ -181,11 +181,14 @@ class MainActivity : ComponentActivity() {
 
                         composable(Route.WishListScreen.route) {
                             val viewModel: WishListVM = hiltViewModel()
+                            val state by viewModel.state.collectAsStateWithLifecycle()
 
                             WishListScreen(
+                                state = state,
                                 navigate = { route ->
                                     navController.navigate(route)
                                 },
+                                action = viewModel::onAction,
                                 user = googleAuthUIClient.getSignedInUser()
                             )
                         }

@@ -1,6 +1,5 @@
 package com.example.theguide.presentation.dashboard
 
-import Recommendation
 import com.example.theguide.domain.model.PlaceModel
 
 data class DashboardState(
@@ -8,5 +7,4 @@ data class DashboardState(
     val isLoading : Boolean = false,
     val error : String? = null,
     val userId : String = "",
-    val wishList : List<Int> = emptyList()
 )

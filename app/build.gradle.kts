@@ -109,6 +109,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.android.gms:play-services-tasks:18.1.0")
+
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")

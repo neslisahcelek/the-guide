@@ -1,6 +1,6 @@
 package com.example.theguide.ui.component
 
-import androidx.compose.foundation.Image
+import Recommendation
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,26 +28,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.theguide.R
-import com.example.theguide.domain.model.Place
+import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.presentation.welcome.WelcomeAction
 import com.example.theguide.presentation.welcome.WelcomeState
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.bg
+import com.example.theguide.util.Util
 
 @Composable
 fun RateCard(
     modifier: Modifier = Modifier,
-    place: Place,
+    place: PlaceModel,
     action: (WelcomeAction) -> Unit = {},
     state: WelcomeState,
     navigate: (String) -> Unit = {},
+    userId: String? = null
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -55,7 +56,7 @@ fun RateCard(
             containerColor = Color.White
         ),
         modifier = modifier
-            .clickable { place.url } //TODO
+            .clickable { place.mapsUrl } //TODO
             .fillMaxWidth()
             .wrapContentHeight()
 
@@ -72,13 +73,14 @@ fun RateCard(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = place.name,
+                    text = place.placeName,
                     color = Color.Black,
                     style = MaterialTheme.typography.titleLarge,
                 )
             }
             AsyncImage(
-                model = place.imageUrl, contentDescription = "Place Image",
+                model = place.photos.first(),
+                contentDescription = "Place Image",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -95,7 +97,7 @@ fun RateCard(
             }
             Spacer(modifier = Modifier.height(5.dp))
 
-            RatingSlider(action = action, state = state, navigate = navigate)
+            RatingSlider(userId = userId, action = action, state = state, navigate = navigate)
         }
     }
 }
@@ -105,6 +107,7 @@ fun RatingSlider(
     action: (WelcomeAction) -> Unit = {},
     state: WelcomeState,
     navigate: (String) -> Unit = {},
+    userId: String? = null
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Row(
@@ -139,7 +142,8 @@ fun RatingSlider(
             onClick = {
                 action.invoke(
                     WelcomeAction.RatePlace(
-                        placeId = state.currentPlace.id,
+                        userId = userId ?: "",
+                        placeId = 1, //state.currentPlace.id
                         rating = sliderPosition.toDouble()
                     )
                 )
@@ -159,12 +163,7 @@ fun RatingSlider(
 fun RateCardPreview() {
     TheGuideTheme {
         RateCard(
-            place = Place(
-                id = 2,
-                name = "Understone",
-                rating = 4.5,
-                imageUrl = R.drawable.understone.toString(),
-            ),
+            place = Util.getPlace(),
             action = {},
             state = WelcomeState()
         )
