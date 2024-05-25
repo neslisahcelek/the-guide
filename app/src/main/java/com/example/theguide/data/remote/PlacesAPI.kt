@@ -42,4 +42,7 @@ interface PlacesAPI {
     suspend fun getWishList(
         @Query("user_id") userId: String
     ): WishListResponse
+
+    @GET("/first_5_places")
+    suspend fun getTop5(): RecommendationResponse
 }

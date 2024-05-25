@@ -1,8 +1,9 @@
 package com.example.theguide.data.repository
 
-import Recommendation
+import com.example.theguide.data.mapper.toPlaceModelList
 import com.example.theguide.data.remote.PlacesAPI
 import com.example.theguide.data.remote.dto.RatingInfo
+import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.resource.Resource
 
@@ -30,13 +31,13 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-    override suspend fun getRecommendation(userId: String, recommendationLimit: Int): Resource<List<Recommendation>> {
+    override suspend fun getRecommendation(userId: String, recommendationLimit: Int): Resource<List<PlaceModel>> {
         return try {
             Resource.Success(
                 placesAPI.getRecommendation(
                     userId = userId,
                     recommendationLimit = recommendationLimit
-                ).recommendations
+                ).toPlaceModelList()
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -71,5 +72,14 @@ class PlaceRepositoryImpl constructor(
         }
     }
 
-
+    override suspend fun getTop5(): Resource<List<PlaceModel>> {
+        return try {
+            Resource.Success(
+                placesAPI.getTop5().toPlaceModelList()
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error("An error occurred (getTop5)")
+        }
+    }
 }
