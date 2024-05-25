@@ -46,7 +46,6 @@ class SignInVM @Inject constructor(
     }
 
     private fun saveUserToDb(tokenId: String) {
-        Log.d("SignInVM saveUser", "tokenId: $tokenId")
         viewModelScope.launch {
             val result = createUserUseCase.execute(tokenId)
             Log.d("SignInVM saveUser", "userID: ${result.data} message: ${result.message}")
