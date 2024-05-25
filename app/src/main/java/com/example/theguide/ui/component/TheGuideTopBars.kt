@@ -4,9 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -65,6 +68,44 @@ fun PrimaryTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun DashboardTopAppBar(
+    title: String,
+    onBackClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                style = Typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
+                ),
+                color = Color.White
+            )
+        },
+        actions = {
+            IconButton(
+                onClick = { onProfileClick.invoke() }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.AccountCircle,
+                    contentDescription = "Add Button",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .size(32.dp)
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun AppBarWithActions(
     title: String
 ) {
@@ -105,6 +146,7 @@ fun TheGuideAppBarsPreview() {
     TheGuideTheme {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             PrimaryTopAppBar(title = "Primary")
+            DashboardTopAppBar(title = "Dashboard")
             AppBarWithActions(title = "AppBarWithActions")
             LargeTopAppBar()
         }
