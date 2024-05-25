@@ -83,3 +83,4 @@ replay_pid*
 .idea/gradle.xml
 .idea/misc.xml
 local.properties
+app/src/main/java/com/example/theguide/util/Util.kt
