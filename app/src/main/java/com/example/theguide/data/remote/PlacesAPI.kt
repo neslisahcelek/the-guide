@@ -4,6 +4,7 @@ import RecommendationResponse
 import com.example.theguide.data.remote.response.BaseResponse
 import com.example.theguide.data.remote.dto.RatingInfo
 import com.example.theguide.data.remote.response.RatingResponse
+import com.example.theguide.data.remote.response.TopPlacesResponse
 import com.example.theguide.data.remote.response.WishListResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -44,5 +45,5 @@ interface PlacesAPI {
     ): WishListResponse
 
     @GET("/first_5_places")
-    suspend fun getTop5(): RecommendationResponse
+    suspend fun getTop5(): TopPlacesResponse
 }
