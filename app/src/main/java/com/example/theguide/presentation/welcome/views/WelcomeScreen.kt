@@ -1,4 +1,4 @@
-package com.example.theguide.presentation.welcome
+package com.example.theguide.presentation.welcome.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,6 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.theguide.R
+import com.example.theguide.domain.model.User
+import com.example.theguide.presentation.welcome.WelcomeAction
+import com.example.theguide.presentation.welcome.WelcomeState
 import com.example.theguide.ui.component.RateCard
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.Typography
@@ -30,6 +31,7 @@ fun WelcomeScreen(
     action: (WelcomeAction) -> Unit = {},
     navigate: (String) -> Unit = {},
     state: WelcomeState,
+    user: User
 ) {
     Surface (modifier = Modifier.fillMaxSize()) {
         Scaffold (
@@ -39,18 +41,18 @@ fun WelcomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(values)
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             ){
                 Spacer(modifier = Modifier.fillMaxHeight(0.1f))
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    text = stringResource(id = R.string.welcome_screen_title, state.userName),
+                    text = stringResource(id = R.string.welcome_screen_title, user.displayName.substringBefore(" ")),
                     style = Typography.headlineMedium.copy(
                         fontSize = 28.sp,
                         fontWeight = FontWeight(500),
-                    )
+                    ),
+                    maxLines = 1
                 )
 
                 Text(
@@ -67,11 +69,12 @@ fun WelcomeScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 RateCard(
-                    modifier = Modifier.padding(5.dp),
+                    modifier = Modifier.padding(15.dp),
                     place = state.currentPlace,
                     action = action,
                     state = state,
-                    navigate = navigate
+                    navigate = navigate,
+                    userId = user.id
                 )
             }
         }
@@ -83,7 +86,14 @@ fun WelcomeScreen(
 fun WelcomeScreenPreview() {
     TheGuideTheme {
         WelcomeScreen(
-            state = WelcomeState()
+            state = WelcomeState(),
+            user = User(
+                id = "1",
+                displayName = "Neslişah",
+                email = "",
+                picture = "",
+                phoneNumber = ""
+            )
         )
     }
 }

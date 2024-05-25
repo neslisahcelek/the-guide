@@ -90,24 +90,9 @@ fun AppBarWithActions(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WelcomeTopAppBar(
-    name: String
-) {
+fun LargeTopAppBar() {
     LargeTopAppBar(
-        title = {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp),
-                textAlign = TextAlign.End,
-                text = stringResource(id = R.string.welcome_screen_title, name),
-                style = Typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif
-                ),
-                color = Color.White
-            )
-        },
+        title = {},
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         )
@@ -121,7 +106,7 @@ fun TheGuideAppBarsPreview() {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             PrimaryTopAppBar(title = "Primary")
             AppBarWithActions(title = "AppBarWithActions")
-            WelcomeTopAppBar(name = "Name")
+            LargeTopAppBar()
         }
     }
 }
