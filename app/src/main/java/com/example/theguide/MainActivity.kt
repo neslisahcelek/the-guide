@@ -32,6 +32,8 @@ import com.example.theguide.presentation.topplaces.TopPlacesScreen
 import com.example.theguide.presentation.topplaces.TopPlacesVM
 import com.example.theguide.presentation.welcome.views.WelcomeScreen
 import com.example.theguide.presentation.welcome.WelcomeVM
+import com.example.theguide.presentation.wishlist.WishListScreen
+import com.example.theguide.presentation.wishlist.WishListVM
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.google.android.gms.auth.api.identity.Identity
 import dagger.hilt.android.AndroidEntryPoint
@@ -174,6 +176,17 @@ class MainActivity : ComponentActivity() {
                                         navController.navigate(Route.LoginScreen.route)
                                     }
                                 }
+                            )
+                        }
+
+                        composable(Route.WishListScreen.route) {
+                            val viewModel: WishListVM = hiltViewModel()
+
+                            WishListScreen(
+                                navigate = { route ->
+                                    navController.navigate(route)
+                                },
+                                user = googleAuthUIClient.getSignedInUser()
                             )
                         }
                     }
