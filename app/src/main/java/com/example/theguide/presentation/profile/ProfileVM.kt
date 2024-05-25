@@ -20,31 +20,35 @@ class ProfileVM @Inject constructor(
     private val _state = MutableStateFlow(ProfileState())
     val state = _state.asStateFlow()
 
-    init {
-        getUserInfo()
-    }
-
     fun onAction(action: ProfileAction) {
         when (action) {
-            is ProfileAction.Logout -> logout()
+            is ProfileAction.Logout -> {}
         }
     }
 
+    /*
     private fun logout() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 userDao.deleteUser(state.value.user!!)
+                withContext(Dispatchers.Main) {
+                    _state.update {
+                        it.copy(isLoggedOut = true)
+                    }
+                }
             } catch (e: Exception) {
                 Log.e("ProfileVM", "Error logging out: ${e.message}")
             }
         }
     }
 
+     */
+
     private fun getUserInfo() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val userEntity = userDao.getUser()
-                Log.d("ProfileVM", "getUserInfo: ${userEntity?.firstName}")
+                Log.d("ProfileVM", "GetUserInfo: ${userEntity?.imageUrl}")
 
                 if (userEntity != null) {
                     withContext(Dispatchers.Main) {

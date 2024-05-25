@@ -6,5 +6,6 @@ data class ProfileState (
     var profileImage: String? = null,
     var userName: String = "",
     var city: String = "Antalya",
-    var user: UserEntity? = null
+    var user: UserEntity? = null,
+    var isLoggedOut: Boolean = false
 )

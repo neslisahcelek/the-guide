@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.theguide.R
 import com.example.theguide.data.local.UserEntity
+import com.example.theguide.domain.model.User
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.theme.TheGuideTheme
@@ -40,6 +41,8 @@ fun ProfileScreen(
     action: (ProfileAction) -> Unit = {},
     navigate: (String) -> Unit = {},
     state: ProfileState,
+    user: User? = null,
+    onSignOut: () -> Unit = {}
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -75,7 +78,7 @@ fun ProfileScreen(
                     */
 
                     AsyncImage(
-                        model = state.profileImage,
+                        model = user?.picture,
                         contentDescription = "Profile Image",
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier
@@ -88,7 +91,7 @@ fun ProfileScreen(
 
 
                     Text(
-                        text = state.userName,
+                        text = user?.displayName ?: "",
                         color = softOrange,
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight(700),
@@ -98,24 +101,28 @@ fun ProfileScreen(
 
                     ProfileRow(
                         title = stringResource(id = R.string.profile_email),
-                        value = state.user?.email ?: ""
+                        value = user?.email ?: ""
                     )
 
                     ProfileRow(
                         title = stringResource(id = R.string.profile_city),
                         value = state.city
                     )
+
+                    Button(onClick = { navigate.invoke(Route.WishListScreen.route) }) {
+                        Text(text = "Gitmek istediğin yerler")
+                    }
                 }
 
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 30.dp)
+                        .padding(bottom = 60.dp)
                 ) {
                     Button(
                         onClick = {
+                            onSignOut.invoke()
                             action.invoke(ProfileAction.Logout)
-                            navigate.invoke(Route.LoginScreen.route)
                         }
                     ) {
                         Text(
@@ -165,15 +172,22 @@ fun ProfileScreenPreview() {
     TheGuideTheme {
         ProfileScreen(
             state = ProfileState(
-                userName = "Neslişah Çelek",
+                userName = "",
                 user = UserEntity(
-                    firstName = "Neslişah",
-                    lastName = "Çelek",
+                    firstName = "",
+                    lastName = "",
                     googleTokenId = "",
                     imageUrl = "",
                     id = "",
-                    email = "neslisah.celek@outlook.com"
+                    email = ""
                 )
+            ),
+            user = User(
+                id = "1",
+                displayName = "Neslişah Çelek",
+                email = "neslisah.celek@outlook.com",
+                picture = "",
+                phoneNumber = "05554443388"
             )
         )
     }
