@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theguide.domain.usecase.place.AddRatingUseCase
-import com.example.theguide.domain.usecase.place.GetTop5UseCase
+import com.example.theguide.domain.usecase.place.GetTopPlacesUseCase
 import com.example.theguide.util.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WelcomeVM @Inject constructor(
     private val addRatingUseCase: AddRatingUseCase,
-    private val getTop5UseCase: GetTop5UseCase
+    private val getTopPlacesUseCase: GetTopPlacesUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(WelcomeState())
     val state = _state.asStateFlow()
@@ -37,7 +37,7 @@ class WelcomeVM @Inject constructor(
 
     private fun fetchPlaces() {
         viewModelScope.launch {
-            val result = getTop5UseCase.execute()
+            val result = getTopPlacesUseCase.execute()
             val placeList = result.data ?: emptyList()
             _state.update {
                 it.copy(

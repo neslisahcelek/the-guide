@@ -77,6 +77,7 @@ class DashboardVM @Inject constructor(
                         SetOptions.merge()
                     )
                 )
+                Log.d("addToWishList", "DocumentSnapshot added with ID: ${document.id}")
             } catch (exception: Exception) {
                 Log.d("addToWishList", "Error adding document: ", exception)
             }

@@ -10,5 +10,5 @@ interface PlaceRepository {
     suspend fun addToWishList(userId: String, placeId: Int): Resource<String>
     suspend fun removeFromWishList(userId: String, placeId: Int): Resource<String>
     suspend fun getWishList(userId: String): Resource<List<Int>>
-    suspend fun getTop5(): Resource<List<PlaceModel>>
+    suspend fun getTopPlaces(): Resource<List<PlaceModel>>
 }
