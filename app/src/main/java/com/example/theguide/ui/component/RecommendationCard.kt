@@ -15,9 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -98,13 +101,14 @@ fun RecommendationCard(
                     contentDescription = "Place Image",
                     placeholder = painterResource(id = R.drawable.understone)
                 )
+                val initialIsInList = false
                 var isInList by remember {
-                    mutableStateOf(false)
+                    mutableStateOf(initialIsInList)
                 }
                 Icon(
                     imageVector =
                         if (isInList) {
-                            Icons.Filled.FavoriteBorder
+                            Icons.Filled.Favorite
                         } else {
                             Icons.Outlined.FavoriteBorder
                         },
@@ -112,12 +116,12 @@ fun RecommendationCard(
                     tint = Color.Red,
                     modifier = Modifier
                         .clickable {
-                            isInList = if (!isInList) {
+                            if (!isInList) {
                                 onAddToWishList()
-                                true
+                                isInList = true
                             } else {
                                 onRemoveFromWishList()
-                                false
+                                isInList = false
                             }
                         }
                         .padding(8.dp)
