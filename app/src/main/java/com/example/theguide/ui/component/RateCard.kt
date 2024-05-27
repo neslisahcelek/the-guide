@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -84,6 +85,9 @@ fun RateCard(
             ) {
                 Text(
                     text = place.placeName,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
                     color = Color.Black,
                     style = MaterialTheme.typography.titleLarge,
                 )
