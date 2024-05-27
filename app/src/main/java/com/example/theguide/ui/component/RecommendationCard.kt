@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -141,6 +142,9 @@ fun RecommendationCard(
             ) {
                 Text(
                     text = place.placeName,
+                    modifier = Modifier.weight(0.7f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = Color.Black,
                     style = MaterialTheme.typography.titleMedium,
                 )
