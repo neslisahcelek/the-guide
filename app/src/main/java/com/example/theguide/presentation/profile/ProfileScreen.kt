@@ -117,7 +117,7 @@ fun ProfileScreen(
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 60.dp)
+                        .padding(bottom = 80.dp)
                 ) {
                     Button(
                         onClick = {

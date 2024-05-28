@@ -9,7 +9,7 @@ fun TopPlacesResponse.toPlaceModelList(): List<PlaceModel> {
         PlaceModel(
             id = recommendation.id,
             placeName = recommendation.placeName,
-            expectedScore = 0.0,
+            expectedScore = 0.0f,
             address = recommendation.address,
             openingHours = recommendation.openingHours,
             rating = recommendation.rating,

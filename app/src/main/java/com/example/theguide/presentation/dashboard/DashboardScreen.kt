@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.example.theguide.R
 import com.example.theguide.domain.model.User
 import com.example.theguide.presentation.navigation.Route
+import com.example.theguide.ui.component.DashboardTopAppBar
 import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
@@ -46,9 +47,10 @@ fun DashboardScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                PrimaryTopAppBar(
+                DashboardTopAppBar(
                     title = stringResource(id = R.string.dashboard_screen_title),
-                    onBackClick = { navigate.invoke(Route.WelcomeScreen.route) }
+                    onBackClick = { navigate.invoke(Route.WelcomeScreen.route) },
+                    onProfileClick = { navigate.invoke(Route.ProfileScreen.route) }
                 )
             }
         ) { values ->
@@ -85,11 +87,6 @@ fun DashboardScreen(
                             }
                         )
                     }
-                }
-                Button(
-                    onClick = { navigate.invoke(Route.ProfileScreen.route) },
-                ) {
-                    Text("Profile")
                 }
             }
         }

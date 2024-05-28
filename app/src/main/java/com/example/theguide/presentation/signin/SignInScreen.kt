@@ -103,7 +103,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.height(15.dp))
 
                 Button(
-                    modifier = Modifier.width(Dp.Unspecified),
+                    modifier = Modifier.width(Dp.Unspecified).padding(bottom = 30.dp),
                     onClick = onSignInClick,
                     shape = ButtonDefaults.shape,
                     colors = ButtonDefaults.buttonColors(

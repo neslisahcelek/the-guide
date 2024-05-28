@@ -38,13 +38,15 @@ class WelcomeVM @Inject constructor(
     private fun fetchPlaces() {
         viewModelScope.launch {
             val result = getTopPlacesUseCase.execute()
-            val placeList = result.data ?: emptyList()
-            _state.update {
-                it.copy(
-                    placeList = placeList,
-                    currentPlace = placeList.first(),
-                    currentPlaceIndex = 0
-                )
+            val placeList = result.data
+            if (!placeList.isNullOrEmpty()) {
+                _state.update {
+                    it.copy(
+                        placeList = placeList,
+                        currentPlace = placeList.first(),
+                        currentPlaceIndex = 0
+                    )
+                }
             }
         }
     }
