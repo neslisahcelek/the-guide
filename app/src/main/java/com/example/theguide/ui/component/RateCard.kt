@@ -2,6 +2,7 @@ package com.example.theguide.ui.component
 
 import Recommendation
 import android.content.Intent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -64,13 +65,13 @@ fun RateCard(
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
+            containerColor = MaterialTheme.colorScheme.surface
+
+    ),
         modifier = modifier
             .clickable { context.startActivity(intent) }
             .fillMaxWidth()
             .wrapContentHeight()
-
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
