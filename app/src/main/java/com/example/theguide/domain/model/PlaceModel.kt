@@ -3,7 +3,7 @@ package com.example.theguide.domain.model
 data class PlaceModel(
     val id: Int = 0,
     val placeName: String = "",
-    val expectedScore: Double = 0.0,
+    val expectedScore: Float = 0.0f,
     val address: String = "",
     val openingHours: List<String> = emptyList(),
     val rating: Double = 0.0,

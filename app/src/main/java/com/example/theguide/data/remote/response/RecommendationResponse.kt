@@ -11,7 +11,7 @@ data class Recommendation(
     @field:Json(name = "name")
     val placeName: String,
     @field:Json(name = "expected_score")
-    val expectedScore: Double,
+    val expectedScore: Float,
     @field:Json(name = "address")
     val address: String,
     @field:Json(name = "opening_hours")
