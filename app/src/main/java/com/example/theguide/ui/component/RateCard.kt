@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -96,10 +97,12 @@ fun RateCard(
             AsyncImage(
                 model = place.photos.first(),
                 contentDescription = "Place Image",
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surface)
                     .fillMaxWidth()
                     .height(180.dp),
+                placeholder = painterResource(id = R.drawable.understone)
             )
 
             Spacer(modifier = Modifier.height(10.dp))

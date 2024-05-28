@@ -2,6 +2,7 @@ package com.example.theguide.presentation.signin
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,18 +61,15 @@ fun SignInScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    color = bg2
-                )
         ) {
-            /*
+
             Image(
-                painterResource(id = R.drawable.bg),
+                painterResource(id = R.drawable.peakpx),
                 contentDescription = "background",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize(),
             )
-             */
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
