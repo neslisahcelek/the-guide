@@ -1,5 +1,6 @@
 package com.example.theguide.presentation.welcome.views
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,8 +13,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,6 +32,10 @@ import com.example.theguide.presentation.welcome.WelcomeState
 import com.example.theguide.ui.component.RateCard
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.Typography
+import com.example.theguide.ui.theme.bg
+import com.example.theguide.ui.theme.bg1
+import com.example.theguide.ui.theme.softOrange
+import com.example.theguide.ui.theme.softOrangeText
 
 @Composable
 fun WelcomeScreen(
@@ -39,6 +48,13 @@ fun WelcomeScreen(
         Scaffold (
             modifier = Modifier.fillMaxSize(),
         ) { values ->
+            Image(
+                painterResource(id = R.drawable.peakpx),
+                contentDescription = "background",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier.fillMaxSize(),
+            )
+
             Column (
                 modifier = Modifier
                     .fillMaxSize()
@@ -54,17 +70,20 @@ fun WelcomeScreen(
                         fontSize = 28.sp,
                         fontWeight = FontWeight(500),
                     ),
+                    color = softOrange,
                     maxLines = 1
                 )
 
                 Text(
                     modifier = Modifier.padding(16.dp),
                     textAlign = TextAlign.Center,
+                    color = Color.Black,
                     text = stringResource(id = R.string.welcome_screen_text))
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
+                    color = Color.Black,
                     text = "${state.currentPlaceIndex+1} / ${state.placeList.size}"
                 )
 
