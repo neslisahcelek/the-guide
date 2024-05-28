@@ -99,7 +99,7 @@ fun RateCard(
                 contentDescription = "Place Image",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .background(Color.Black)
+                    .background(MaterialTheme.colorScheme.surface)
                     .fillMaxWidth()
                     .height(180.dp),
                 placeholder = painterResource(id = R.drawable.understone)
