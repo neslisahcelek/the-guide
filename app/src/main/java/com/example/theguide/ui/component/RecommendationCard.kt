@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -54,6 +55,7 @@ import com.example.theguide.R
 import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.Typography
+import com.example.theguide.ui.theme.softOrange
 import com.example.theguide.ui.theme.yellow
 import com.example.theguide.util.Util
 
@@ -125,8 +127,9 @@ fun RecommendationCard(
                 } else {
                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s"
                 },
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
+                    .background(Color.Black)
                     .clickable {
                         context.startActivity(intent)
                     }
