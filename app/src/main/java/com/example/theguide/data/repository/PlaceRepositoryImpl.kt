@@ -3,6 +3,7 @@ package com.example.theguide.data.repository
 import com.example.theguide.data.mapper.toPlaceModelList
 import com.example.theguide.data.remote.PlacesAPI
 import com.example.theguide.data.remote.dto.RatingInfo
+import com.example.theguide.data.remote.dto.RecommendInfo
 import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.domain.repository.PlaceRepository
 import com.example.theguide.domain.resource.Resource
@@ -31,12 +32,19 @@ class PlaceRepositoryImpl(
         }
     }
 
-    override suspend fun getRecommendation(userId: String, recommendationLimit: Int): Resource<List<PlaceModel>> {
+    override suspend fun getRecommendation(
+        userId: String,
+        recommendationLimit: Int,
+        districtList: List<String>
+    ): Resource<List<PlaceModel>> {
         return try {
             Resource.Success(
                 placesAPI.getRecommendation(
-                    userId = userId,
-                    recommendationLimit = recommendationLimit
+                    recommendInfo = RecommendInfo(
+                        userId = userId,
+                        recommendationLimit = recommendationLimit,
+                        districtList = districtList
+                    )
                 ).toPlaceModelList()
             )
         } catch (e: Exception) {

@@ -64,12 +64,11 @@ fun SignInScreen(
         ) {
 
             Image(
-                painterResource(id = R.drawable.peakpx),
+                painterResource(id = R.drawable.bg2),
                 contentDescription = "background",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize(),
             )
-
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,12 +81,11 @@ fun SignInScreen(
                     tint = softOrange,
                     modifier = Modifier.size(100.dp)
                 )
-                Spacer(modifier = Modifier.height(340.dp))
 
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp),
+                        .padding(start = 30.dp, top = 300.dp),
                     textAlign = TextAlign.Start,
                     text = stringResource(id = R.string.login_screen_title),
                     style = Typography.headlineMedium.copy(
@@ -101,7 +99,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.height(15.dp))
 
                 Button(
-                    modifier = Modifier.width(Dp.Unspecified).padding(bottom = 30.dp),
+                    modifier = Modifier.width(Dp.Unspecified),
                     onClick = onSignInClick,
                     shape = ButtonDefaults.shape,
                     colors = ButtonDefaults.buttonColors(

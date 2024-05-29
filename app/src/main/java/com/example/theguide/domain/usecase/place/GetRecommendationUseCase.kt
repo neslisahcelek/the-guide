@@ -6,8 +6,13 @@ import javax.inject.Inject
 class GetRecommendationUseCase @Inject constructor(
     private val placeRepository: PlaceRepository
 ) {
-    suspend fun execute(userId: String, recommendationLimit: Int=5) = placeRepository.getRecommendation(
+    suspend fun execute(
+        userId: String,
+        recommendationLimit: Int = 5,
+        districtList: List<String> = listOf()
+    ) = placeRepository.getRecommendation(
         userId = userId,
-        recommendationLimit = recommendationLimit
+        recommendationLimit = recommendationLimit,
+        districtList = districtList
     )
 }
