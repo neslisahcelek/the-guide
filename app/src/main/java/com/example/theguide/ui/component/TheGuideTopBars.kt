@@ -2,6 +2,7 @@ package com.example.theguide.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -10,6 +11,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -70,7 +73,7 @@ fun PrimaryTopAppBar(
 @Composable
 fun DashboardTopAppBar(
     title: String,
-    onBackClick: () -> Unit = {},
+    onFilterClick: () -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
@@ -86,6 +89,20 @@ fun DashboardTopAppBar(
         },
         actions = {
             IconButton(
+                onClick = { onFilterClick.invoke() }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.List,
+                    contentDescription = "Add Button",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .size(32.dp)
+                )
+            }
+        },
+        navigationIcon = {
+            IconButton(
                 onClick = { onProfileClick.invoke() }
             ) {
                 Icon(
@@ -93,7 +110,7 @@ fun DashboardTopAppBar(
                     contentDescription = "Add Button",
                     tint = Color.White,
                     modifier = Modifier
-                        .padding(end = 8.dp)
+                        .padding(start = 8.dp)
                         .size(32.dp)
                 )
             }

@@ -1,6 +1,5 @@
 package com.example.theguide.presentation.dashboard
 
-import Recommendation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,11 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -27,7 +24,6 @@ import com.example.theguide.R
 import com.example.theguide.domain.model.User
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.ui.component.DashboardTopAppBar
-import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.util.Util
@@ -49,7 +45,7 @@ fun DashboardScreen(
             topBar = {
                 DashboardTopAppBar(
                     title = stringResource(id = R.string.dashboard_screen_title),
-                    onBackClick = { navigate.invoke(Route.WelcomeScreen.route) },
+                    onFilterClick = { action.invoke(DashboardAction.FilterDistricts(emptyList())) },
                     onProfileClick = { navigate.invoke(Route.ProfileScreen.route) }
                 )
             }
