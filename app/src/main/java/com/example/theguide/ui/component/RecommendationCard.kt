@@ -2,6 +2,8 @@ package com.example.theguide.ui.component
 
 import Recommendation
 import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +33,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,12 +70,16 @@ fun RecommendationCard(
     onRemoveFromWishList: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val intent = remember {
-        Intent(Intent.ACTION_VIEW).apply {
-            data = android.net.Uri.parse(place.mapsUrl)
+    var intent = Intent(Intent.ACTION_VIEW)
+
+    LaunchedEffect(place.mapsUrl) {
+        intent = intent.apply {
+            data = Uri.parse(place.mapsUrl)
+            Log.d("RateCard", "intent: ${intent.data} url: $place.mapsUrl")
             setPackage("com.google.android.apps.maps")
         }
     }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()

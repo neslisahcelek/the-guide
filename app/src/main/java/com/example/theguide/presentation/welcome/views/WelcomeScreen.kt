@@ -49,7 +49,7 @@ fun WelcomeScreen(
             modifier = Modifier.fillMaxSize(),
         ) { values ->
             Image(
-                painterResource(id = R.drawable.peakpx),
+                painterResource(id = R.drawable.bg),
                 contentDescription = "background",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize(),
@@ -95,7 +95,9 @@ fun WelcomeScreen(
                     action = action,
                     state = state,
                     navigate = navigate,
-                    userId = user.id
+                    userId = user.id,
+                    placeId = state.currentPlace.id,
+                    placeUrl = state.currentPlace.mapsUrl
                 )
             }
         }

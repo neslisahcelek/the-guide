@@ -1,7 +1,7 @@
 package com.example.theguide.ui.component
 
-import Recommendation
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +22,11 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,12 +55,17 @@ fun RateCard(
     action: (WelcomeAction) -> Unit = {},
     state: WelcomeState,
     navigate: (String) -> Unit = {},
-    userId: String? = null
+    userId: String? = null,
+    placeId: Int = 0,
+    placeUrl: String = "",
 ) {
     val context = LocalContext.current
-    val intent = remember {
-        Intent(Intent.ACTION_VIEW).apply {
-            data = android.net.Uri.parse(place.mapsUrl)
+    var intent = Intent(Intent.ACTION_VIEW)
+
+    LaunchedEffect(placeUrl) {
+        intent = intent.apply {
+            data = android.net.Uri.parse(placeUrl)
+            Log.d("RateCard", "intent: ${intent.data} url: $placeUrl")
             setPackage("com.google.android.apps.maps")
         }
     }
@@ -113,9 +120,8 @@ fun RateCard(
                     style = MaterialTheme.typography.titleMedium
                 )
             }
-            Spacer(modifier = Modifier.height(5.dp))
 
-            RatingSlider(userId = userId, action = action, state = state, navigate = navigate)
+            RatingSlider(userId = userId, action = action, state = state, navigate = navigate, placeId = placeId)
         }
     }
 }
@@ -125,11 +131,12 @@ fun RatingSlider(
     action: (WelcomeAction) -> Unit = {},
     state: WelcomeState,
     navigate: (String) -> Unit = {},
-    userId: String? = null
+    userId: String? = null,
+    placeId: Int = 0
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -161,7 +168,7 @@ fun RatingSlider(
                 action.invoke(
                     WelcomeAction.RatePlace(
                         userId = userId ?: "",
-                        placeId = 1, //state.currentPlace.id
+                        placeId = placeId,
                         rating = sliderPosition.toDouble()
                     )
                 )
