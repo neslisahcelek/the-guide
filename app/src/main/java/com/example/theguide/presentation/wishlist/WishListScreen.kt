@@ -83,7 +83,9 @@ fun WishListScreen(
                         contentPadding = PaddingValues(10.dp),
                     ) {
                         items(state.wishList) { place ->
-                            RecommendationCard(
+                            WishCard(
+                                action = action,
+                                userId = user?.id,
                                 place = place,
                                 onRemoveFromWishList = {
                                     action.invoke(

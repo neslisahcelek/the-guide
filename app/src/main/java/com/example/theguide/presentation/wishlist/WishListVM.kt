@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theguide.domain.model.PlaceModel
+import com.example.theguide.domain.usecase.place.AddRatingUseCase
 import com.example.theguide.domain.usecase.wishlist.WishListUseCases
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.SetOptions
@@ -19,7 +20,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WishListVM @Inject constructor() : ViewModel(){
+class WishListVM @Inject constructor(
+    private val addRatingUseCase: AddRatingUseCase,
+) : ViewModel() {
     private val _state = MutableStateFlow(WishListState())
     val state = _state.asStateFlow()
 
@@ -30,14 +33,18 @@ class WishListVM @Inject constructor() : ViewModel(){
             is WishListAction.LoadWishList -> {
                 getWishList(action.userId)
             }
+
             is WishListAction.RemoveFromWishList -> removeFromWishList(action.userId, action.place)
+            is WishListAction.RatePlace -> addRating(action.userId, action.placeId, action.rating)
         }
     }
 
     private fun getWishList(userId: String) {
         val document = wishListCollection.document(userId).collection("wishlist")
 
-        Log.d("getWishList", "userId: $userId, document: ${document.get()}")
+        _state.update {
+            it.copy(wishList = emptyList()) //loading
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -46,17 +53,27 @@ class WishListVM @Inject constructor() : ViewModel(){
                     _state.update {
                         it.copy(wishList = emptyList())
                     }
-                    Log.d("getWishList", "No wishList found")
                 } else {
                     val wishList = result.toObjects(PlaceModel::class.java)
                     _state.update {
                         it.copy(wishList = wishList)
                     }
-                    Log.d("getWishList", "Success: ${wishList.size} wishList: $wishList")
                 }
             } catch (exception: Exception) {
                 Log.d("getWishList", "Error getting documents: ", exception)
             }
+        }
+    }
+
+    private fun addRating(userId: String, placeId: Int, rating: Double) {
+        Log.d("Wishlist", "user,place,rating: $userId $placeId $rating")
+        viewModelScope.launch {
+            val result = addRatingUseCase.execute(
+                userId = userId,
+                placeId = placeId,
+                rating = rating
+            )
+            Log.d("Wishlist", "addRating: ${result.data} ${result.message}")
         }
     }
 
@@ -65,7 +82,8 @@ class WishListVM @Inject constructor() : ViewModel(){
             Log.d("removeFromWishList error", "userId is null")
             return
         }
-        val document = wishListCollection.document(userId).collection("wishlist").document(wish.id.toString())
+        val document =
+            wishListCollection.document(userId).collection("wishlist").document(wish.id.toString())
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
