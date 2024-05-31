@@ -30,6 +30,8 @@ import com.example.theguide.presentation.profile.ProfileScreen
 import com.example.theguide.presentation.profile.ProfileVM
 import com.example.theguide.presentation.topplaces.TopPlacesScreen
 import com.example.theguide.presentation.topplaces.TopPlacesVM
+import com.example.theguide.presentation.visitedlist.VisitedListVM
+import com.example.theguide.presentation.visitedlist.views.VisitedListScreen
 import com.example.theguide.presentation.welcome.views.WelcomeScreen
 import com.example.theguide.presentation.welcome.WelcomeVM
 import com.example.theguide.presentation.wishlist.WishListScreen
@@ -184,6 +186,20 @@ class MainActivity : ComponentActivity() {
                             val state by viewModel.state.collectAsStateWithLifecycle()
 
                             WishListScreen(
+                                state = state,
+                                navigate = { route ->
+                                    navController.navigate(route)
+                                },
+                                action = viewModel::onAction,
+                                user = googleAuthUIClient.getSignedInUser()
+                            )
+                        }
+
+                        composable(Route.VisitedListScreen.route) {
+                            val viewModel: VisitedListVM = hiltViewModel()
+                            val state by viewModel.state.collectAsStateWithLifecycle()
+
+                            VisitedListScreen(
                                 state = state,
                                 navigate = { route ->
                                     navController.navigate(route)

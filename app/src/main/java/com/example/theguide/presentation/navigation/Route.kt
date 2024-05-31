@@ -9,4 +9,5 @@ sealed class Route(
     data object ProfileScreen : Route("profileScreen")
     data object TopPlacesScreen : Route("topPlacesScreen")
     data object WishListScreen : Route("wishListScreen")
+    data object VisitedListScreen : Route("visitedListScreen")
 }

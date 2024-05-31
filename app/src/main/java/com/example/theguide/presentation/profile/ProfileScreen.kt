@@ -112,6 +112,10 @@ fun ProfileScreen(
                     Button(onClick = { navigate.invoke(Route.WishListScreen.route) }) {
                         Text(text = "Gitmek istediğin yerler")
                     }
+
+                    Button(onClick = { navigate.invoke(Route.VisitedListScreen.route) }) {
+                        Text(text = "Gittiğin yerler")
+                    }
                 }
 
                 Box(
