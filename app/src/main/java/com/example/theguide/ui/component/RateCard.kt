@@ -136,7 +136,9 @@ fun RatingSlider(
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Row(
-        modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(

@@ -35,7 +35,10 @@ class WishListVM @Inject constructor(
             }
 
             is WishListAction.RemoveFromWishList -> removeFromWishList(action.userId, action.place)
-            is WishListAction.RatePlace -> addRating(action.userId, action.placeId, action.rating)
+            is WishListAction.RatePlace -> {
+                addRating(action.userId, action.place.id, action.rating)
+                addToVisitedList(action.userId, action.place, action.rating)
+            }
         }
     }
 
@@ -66,7 +69,6 @@ class WishListVM @Inject constructor(
     }
 
     private fun addRating(userId: String, placeId: Int, rating: Double) {
-        Log.d("Wishlist", "user,place,rating: $userId $placeId $rating")
         viewModelScope.launch {
             val result = addRatingUseCase.execute(
                 userId = userId,
@@ -75,6 +77,28 @@ class WishListVM @Inject constructor(
             )
             Log.d("Wishlist", "addRating: ${result.data} ${result.message}")
         }
+    }
+
+    private fun addToVisitedList(userId: String?, place: PlaceModel, rating: Double) {
+        if (userId == null) {
+            return
+        }
+        val document =
+            wishListCollection.document(userId).collection("visitedlist")
+                .document(place.id.toString())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                Tasks.await(
+                    document.set(
+                        place.toMap(userRating = rating, isUserRated = true),
+                        SetOptions.merge()
+                    )
+                )
+            } catch (exception: Exception) {
+                Log.d("addToWishList", "Error adding document: ", exception)
+            }
+        }
+        removeFromWishList(userId, place)
     }
 
     private fun removeFromWishList(userId: String?, wish: PlaceModel) {

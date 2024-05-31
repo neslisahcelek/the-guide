@@ -10,9 +10,11 @@ data class PlaceModel(
     val types: List<String> = emptyList(),
     val photos: List<String> = emptyList(),
     val reviews: List<Review> = emptyList(),
-    val mapsUrl: String = ""
+    val mapsUrl: String = "",
+    val userRating: Double = 0.0,
+    val isUserRated: Boolean = false
 ) {
-    fun toMap(): Any {
+    fun toMap(userRating: Double = 0.0, isUserRated: Boolean = false): Any {
         return mapOf(
             "id" to id,
             "placeName" to placeName,
@@ -23,7 +25,9 @@ data class PlaceModel(
             "types" to types,
             "photos" to photos,
             "reviews" to emptyList<Review>(),
-            "mapsUrl" to mapsUrl
+            "mapsUrl" to mapsUrl,
+            "isUserRated" to isUserRated,
+            "userRating" to userRating
         )
     }
 }

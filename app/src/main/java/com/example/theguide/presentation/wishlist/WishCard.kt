@@ -225,11 +225,48 @@ fun WishCard(
                     )
                 }
             } else {
-                RatingSlider(
-                    action = action,
-                    userId = userId,
-                    placeId = place.id
-                )
+                var sliderPosition by remember { mutableFloatStateOf(0f) }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = sliderPosition.toInt().toString(),
+                        modifier = Modifier.padding(start = 10.dp),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black
+                    )
+                    Slider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        value = sliderPosition,
+                        onValueChange = { sliderPosition = it },
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.primary,
+                            activeTrackColor = MaterialTheme.colorScheme.primary,
+                            inactiveTrackColor = bg,
+                        ),
+                        steps = 4,
+                        valueRange = 0f..5f,
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        action.invoke(
+                            WishListAction.RatePlace(
+                                userId = userId ?: "",
+                                place = place,
+                                rating = sliderPosition.toDouble()
+                            )
+                        )
+                        addRatingButtonClicked = false
+                    },
+                    modifier = Modifier.wrapContentSize().padding(bottom = 10.dp),
+                ) {
+                    Text(stringResource(id = R.string.rate_card_button))
+                }
             }
             
         }
@@ -240,7 +277,7 @@ fun WishCard(
 fun RatingSlider(
     action: (WishListAction) -> Unit = {},
     userId: String?,
-    placeId: Int = 0
+    place: PlaceModel
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Row(
@@ -274,7 +311,7 @@ fun RatingSlider(
             action.invoke(
                 WishListAction.RatePlace(
                     userId = userId ?: "",
-                    placeId = placeId,
+                    place = place,
                     rating = sliderPosition.toDouble()
                 )
             )
