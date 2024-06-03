@@ -1,17 +1,13 @@
 package com.example.theguide.presentation.dashboard
 
-import Recommendation
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.domain.model.User
 import com.example.theguide.domain.usecase.place.GetRecommendationUseCase
-import com.example.theguide.domain.usecase.wishlist.WishListUseCases
 import com.example.theguide.util.Util
 import com.google.android.gms.tasks.Tasks
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -42,6 +38,35 @@ class DashboardVM @Inject constructor(
 
             is DashboardAction.AddToWishList -> addToWishList(action.userId, action.place)
             is DashboardAction.RemoveFromWishList -> removeFromWishList(action.userId, action.place)
+            is DashboardAction.FilterDistricts -> filterDistricts(action.districts, action.userId)
+        }
+    }
+
+    private fun filterDistricts(districts: List<CheckboxState>, userId: String?) {
+        val filteredDistricts = districts.filter { it.isChecked }
+        viewModelScope.launch {
+            _state.update {
+                it.copy(isLoading = true)
+            }
+            val result = getRecommendationUseCase.execute(
+                userId = userId ?: "",
+                districtList = filteredDistricts.map { it.text }
+            )
+            Log.d("getRecommendation", "${result.data?.size} ${result.message}")
+            if (result.data != null) {
+                _state.update {
+                    it.copy(
+                        places = result.data
+                    )
+                }
+            } else {
+                _state.update {
+                    it.copy(
+                        error = result.message
+                    )
+                }
+                Log.d("getRecommendation", result.message ?: "")
+            }
         }
     }
 
