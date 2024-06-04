@@ -1,6 +1,5 @@
 package com.example.theguide.ui.component
 
-import Recommendation
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -22,11 +21,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -42,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -58,7 +53,6 @@ import com.example.theguide.R
 import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.Typography
-import com.example.theguide.ui.theme.softOrange
 import com.example.theguide.ui.theme.yellow
 import com.example.theguide.util.Util
 
@@ -67,18 +61,10 @@ fun RecommendationCard(
     modifier: Modifier = Modifier,
     place: PlaceModel,
     onAddToWishList: () -> Unit = {},
-    onRemoveFromWishList: () -> Unit = {}
+    onRemoveFromWishList: () -> Unit = {},
+    intent: Intent = Intent(Intent.ACTION_VIEW)
 ) {
     val context = LocalContext.current
-    var intent = Intent(Intent.ACTION_VIEW)
-
-    LaunchedEffect(place.mapsUrl) {
-        intent = intent.apply {
-            data = Uri.parse(place.mapsUrl)
-            Log.d("RateCard", "intent: ${intent.data} url: $place.mapsUrl")
-            setPackage("com.google.android.apps.maps")
-        }
-    }
 
     Row(
         modifier = Modifier
@@ -128,32 +114,59 @@ fun RecommendationCard(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AsyncImage(
-                model = if (place.photos.isNotEmpty()) {
-                    place.photos.first()
-                } else {
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s"
-                },
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .background(Color.Black)
-                    .clickable {
-                        context.startActivity(intent)
-                    }
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-                contentDescription = "Place Image",
-                placeholder = painterResource(id = R.drawable.understone)
-            )
+            Box {
+                AsyncImage(
+                    model = if (place.photos.isNotEmpty()) {
+                        place.photos.first()
+                    } else {
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s"
+                    },
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .background(Color.Black)
+                        .clickable {
+                            context.startActivity(intent)
+                        }
+                        .fillMaxWidth()
+                        .height(180.dp)
+                        .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+                    contentDescription = "Place Image",
+                    placeholder = painterResource(id = R.drawable.understone)
+                )
 
-            Spacer(modifier = Modifier.height(10.dp))
+                val initialIsInList = false
+                var isInList by remember {
+                    mutableStateOf(initialIsInList)
+                }
+                Icon(
+                    imageVector =
+                    if (isInList) {
+                        Icons.Filled.Favorite
+                    } else {
+                        Icons.Outlined.FavoriteBorder
+                    },
+                    contentDescription = "Add to wish list",
+                    tint = Color.Red,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clickable {
+                            if (!isInList) {
+                                onAddToWishList()
+                                isInList = true
+                            } else {
+                                onRemoveFromWishList()
+                                isInList = false
+                            }
+                        }
+                        .size(20.dp)
+                )
+            }
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
-                    .padding(bottom = 8.dp),
+                    .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -163,33 +176,7 @@ fun RecommendationCard(
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Row(verticalAlignment = Alignment.Bottom) {
-                    val initialIsInList = false
-                    var isInList by remember {
-                        mutableStateOf(initialIsInList)
-                    }
-                    Icon(
-                        imageVector =
-                        if (isInList) {
-                            Icons.Filled.Favorite
-                        } else {
-                            Icons.Outlined.FavoriteBorder
-                        },
-                        contentDescription = "Add to wish list",
-                        tint = Color.Red,
-                        modifier = Modifier
-                            .clickable {
-                                if (!isInList) {
-                                    onAddToWishList()
-                                    isInList = true
-                                } else {
-                                    onRemoveFromWishList()
-                                    isInList = false
-                                }
-                            }
-                            .size(20.dp)
-                    )
-                }
+
             }
 
             /*
