@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.theguide.domain.model.PlaceModel
 import com.example.theguide.domain.usecase.place.AddRatingUseCase
-import com.example.theguide.domain.usecase.wishlist.WishListUseCases
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore

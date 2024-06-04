@@ -50,17 +50,9 @@ import kotlin.math.roundToInt
 @Composable
 fun VisitedPlaceCard(
     place: PlaceModel,
+    intent: Intent = Intent(Intent.ACTION_VIEW)
 ) {
     val context = LocalContext.current
-    var intent = Intent(Intent.ACTION_VIEW)
-
-    LaunchedEffect(place.mapsUrl) {
-        intent = intent.apply {
-            data = Uri.parse(place.mapsUrl)
-            Log.d("RateCard", "intent: ${intent.data} url: $place.mapsUrl")
-            setPackage("com.google.android.apps.maps")
-        }
-    }
 
     Row(
         modifier = Modifier

@@ -1,8 +1,6 @@
 package com.example.theguide.presentation.wishlist
 
 import android.content.Intent
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,14 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,7 +32,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -61,9 +55,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.theguide.R
 import com.example.theguide.domain.model.PlaceModel
-import com.example.theguide.presentation.navigation.Route
-import com.example.theguide.presentation.welcome.WelcomeAction
-import com.example.theguide.presentation.welcome.WelcomeState
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.Typography
 import com.example.theguide.ui.theme.bg
@@ -77,18 +68,10 @@ fun WishCard(
     userId: String? = null,
     place: PlaceModel,
     onAddToWishList: () -> Unit = {},
-    onRemoveFromWishList: () -> Unit = {}
+    onRemoveFromWishList: () -> Unit = {},
+    intent: Intent = Intent(Intent.ACTION_VIEW)
 ) {
     val context = LocalContext.current
-    var intent = Intent(Intent.ACTION_VIEW)
-
-    LaunchedEffect(place.mapsUrl) {
-        intent = intent.apply {
-            data = Uri.parse(place.mapsUrl)
-            Log.d("RateCard", "intent: ${intent.data} url: $place.mapsUrl")
-            setPackage("com.google.android.apps.maps")
-        }
-    }
 
     Row(
         modifier = Modifier
@@ -270,55 +253,6 @@ fun WishCard(
             }
             
         }
-    }
-}
-
-@Composable
-fun RatingSlider(
-    action: (WishListAction) -> Unit = {},
-    userId: String?,
-    place: PlaceModel
-) {
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 5.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = sliderPosition.toInt().toString(),
-            modifier = Modifier.padding(start = 10.dp),
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.Black
-        )
-        Slider(
-            modifier = Modifier.padding(horizontal = 5.dp),
-            value = sliderPosition,
-            onValueChange = { sliderPosition = it },
-            colors = SliderDefaults.colors(
-                thumbColor = MaterialTheme.colorScheme.primary,
-                activeTrackColor = MaterialTheme.colorScheme.primary,
-                inactiveTrackColor = bg,
-            ),
-            steps = 4,
-            valueRange = 0f..5f,
-        )
-    }
-
-    Button(
-        onClick = {
-            action.invoke(
-                WishListAction.RatePlace(
-                    userId = userId ?: "",
-                    place = place,
-                    rating = sliderPosition.toDouble()
-                )
-            )
-        },
-        modifier = Modifier.wrapContentSize().padding(bottom = 10.dp),
-    ) {
-        Text(stringResource(id = R.string.rate_card_button))
     }
 }
 

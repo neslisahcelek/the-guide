@@ -1,6 +1,7 @@
 package com.example.theguide.presentation.wishlist
 
-import android.util.Log
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,6 @@ import com.example.theguide.R
 import com.example.theguide.domain.model.User
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.ui.component.PrimaryTopAppBar
-import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.util.Util
 
@@ -41,7 +41,6 @@ fun WishListScreen(
     state: WishListState = WishListState()
 ) {
     LaunchedEffect(key1 = Unit) {
-        Log.d("WishListScreen", "user: ${user?.id}")
         action.invoke(WishListAction.LoadWishList(user?.id ?: "1"))
     }
 
@@ -94,6 +93,10 @@ fun WishListScreen(
                                             place = place
                                         )
                                     )
+                                },
+                                intent = Intent(Intent.ACTION_VIEW).apply {
+                                    data = Uri.parse(place.mapsUrl)
+                                    setPackage("com.google.android.apps.maps")
                                 }
                             )
                         }
