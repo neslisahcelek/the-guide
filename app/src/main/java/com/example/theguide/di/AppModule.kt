@@ -55,7 +55,7 @@ object AppModule {
     @Provides
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://senior-design-1d3188c2a52c.herokuapp.com")
+            .baseUrl("https://senior-with-db-ceb2c5a4541d.herokuapp.com")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
