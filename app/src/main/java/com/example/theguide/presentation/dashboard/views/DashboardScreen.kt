@@ -43,6 +43,7 @@ import com.example.theguide.presentation.dashboard.DashboardAction
 import com.example.theguide.presentation.dashboard.DashboardState
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.ui.component.DashboardTopAppBar
+import com.example.theguide.ui.component.LoadingScreen
 import com.example.theguide.ui.component.RecommendationCard
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.util.Util
@@ -103,16 +104,7 @@ fun DashboardScreen(
                     .background(MaterialTheme.colorScheme.surface)
             ) {
                 if (state.isLoading) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "loading",
-                        modifier = Modifier.padding(top = 200.dp).size(200.dp),
-                    )
-                    Text(
-                        text = stringResource(id = R.string.loading), textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(10.dp),
-                        color = Color.Black
-                    )
+                    LoadingScreen()
                 } else {
                     Box {
                         LazyColumn(

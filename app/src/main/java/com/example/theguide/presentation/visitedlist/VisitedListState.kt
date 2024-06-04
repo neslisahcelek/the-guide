@@ -3,5 +3,6 @@ package com.example.theguide.presentation.visitedlist
 import com.example.theguide.domain.model.PlaceModel
 
 data class VisitedListState(
-    var visitedList: List<PlaceModel>? = null
+    var visitedList: List<PlaceModel>? = null,
+    var isLoading: Boolean = false
 )

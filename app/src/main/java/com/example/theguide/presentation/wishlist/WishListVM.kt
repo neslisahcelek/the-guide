@@ -45,7 +45,7 @@ class WishListVM @Inject constructor(
         val document = wishListCollection.document(userId).collection("wishlist")
 
         _state.update {
-            it.copy(wishList = emptyList()) //loading
+            it.copy(isLoading = true)
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -53,15 +53,24 @@ class WishListVM @Inject constructor(
                 val result = Tasks.await(document.get())
                 if (result.isEmpty) {
                     _state.update {
-                        it.copy(wishList = emptyList())
+                        it.copy(
+                            wishList = emptyList(),
+                            isLoading = false
+                        )
                     }
                 } else {
                     val wishList = result.toObjects(PlaceModel::class.java)
                     _state.update {
-                        it.copy(wishList = wishList)
+                        it.copy(
+                            wishList = wishList,
+                            isLoading = false
+                        )
                     }
                 }
             } catch (exception: Exception) {
+                _state.update {
+                    it.copy(isLoading = true)
+                }
                 Log.d("getWishList", "Error getting documents: ", exception)
             }
         }

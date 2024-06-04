@@ -20,7 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.theguide.presentation.dashboard.DashboardScreen
+import com.example.theguide.presentation.dashboard.views.DashboardScreen
 import com.example.theguide.presentation.dashboard.DashboardVM
 import com.example.theguide.presentation.signin.GoogleAuthUIClient
 import com.example.theguide.presentation.signin.SignInScreen

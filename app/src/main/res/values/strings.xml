@@ -20,5 +20,10 @@
     <string name="wishlist_button">Önerilerine Göz At</string>
     <string name="expected_score">Bu mekana vereceğin tahmini puan: %1$s</string>
     <string name="average_score">Kullanıcıların ortalama puanı: %1$s</string>
+    <string name="wish_card_add_rating">Bu mekanı keşfettin mi?</string>
+    <string name="wish_card_button">Puan Ver</string>
+    <string name="visited_list_screen_title">Geçmiş Ziyaretlerin</string>
+    <string name="visited_place_rating">Bu mekana %1$s puan verdin.</string>
+    <string name="loading">Mekanlar yükleniyor...</string>
 
 </resources>

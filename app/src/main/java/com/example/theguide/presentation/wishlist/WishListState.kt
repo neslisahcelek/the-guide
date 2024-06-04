@@ -4,4 +4,5 @@ import com.example.theguide.domain.model.PlaceModel
 
 data class WishListState (
     var wishList: List<PlaceModel> = emptyList(),
+    var isLoading: Boolean = false
 )

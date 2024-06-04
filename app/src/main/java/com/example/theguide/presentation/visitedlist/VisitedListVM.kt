@@ -3,6 +3,7 @@ package com.example.theguide.presentation.visitedlist
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.theguide.domain.model.PlaceModel
+import com.example.theguide.domain.resource.Resource
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -35,6 +36,9 @@ class VisitedListVM @Inject constructor() : ViewModel() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                _state.update {
+                    it.copy(isLoading = true)
+                }
                 val result = Tasks.await(document.get())
                 if (result.isEmpty) {
                     _state.update {
@@ -42,14 +46,17 @@ class VisitedListVM @Inject constructor() : ViewModel() {
                     }
                 } else {
                     val visitedList = result.toObjects(PlaceModel::class.java)
-                    visitedList.forEach {
-                        Log.d("getVisitedList", "Place: ${it.userRating}")
-                    }
                     _state.update {
-                        it.copy(visitedList = visitedList)
+                        it.copy(
+                            visitedList = visitedList,
+                            isLoading = false
+                        )
                     }
                 }
             } catch (exception: Exception) {
+                _state.update {
+                    it.copy(isLoading = false)
+                }
                 Log.d("getVisitedList", "Error getting documents: ", exception)
             }
         }

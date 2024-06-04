@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.example.theguide.R
 import com.example.theguide.domain.model.User
 import com.example.theguide.presentation.navigation.Route
+import com.example.theguide.ui.component.LoadingScreen
 import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.util.Util
@@ -62,43 +63,47 @@ fun WishListScreen(
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                     .background(MaterialTheme.colorScheme.surface)
             ) {
-                if (state.wishList.isEmpty()) {
-                    Text(
-                        text = stringResource(id = R.string.wishlist_empty),
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(top = 80.dp)
-                    )
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Button(
-                        onClick = { navigate.invoke(Route.DashboardScreen.route) }) {
-                        Text(
-                            text = stringResource(id = R.string.wishlist_button),
-                        )
-                    }
+                if (state.isLoading) {
+                    LoadingScreen()
                 } else {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(10.dp),
-                    ) {
-                        items(state.wishList) { place ->
-                            WishCard(
-                                action = action,
-                                userId = user?.id,
-                                place = place,
-                                onRemoveFromWishList = {
-                                    action.invoke(
-                                        WishListAction.RemoveFromWishList(
-                                            userId = user?.id,
-                                            place = place
-                                        )
-                                    )
-                                },
-                                intent = Intent(Intent.ACTION_VIEW).apply {
-                                    data = Uri.parse(place.mapsUrl)
-                                    setPackage("com.google.android.apps.maps")
-                                }
+                    if (state.wishList.isEmpty()) {
+                        Text(
+                            text = stringResource(id = R.string.wishlist_empty),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(top = 80.dp)
+                        )
+                        Spacer(modifier = Modifier.padding(10.dp))
+                        Button(
+                            onClick = { navigate.invoke(Route.DashboardScreen.route) }) {
+                            Text(
+                                text = stringResource(id = R.string.wishlist_button),
                             )
+                        }
+                    } else {
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            contentPadding = PaddingValues(10.dp),
+                        ) {
+                            items(state.wishList) { place ->
+                                WishCard(
+                                    action = action,
+                                    userId = user?.id,
+                                    place = place,
+                                    onRemoveFromWishList = {
+                                        action.invoke(
+                                            WishListAction.RemoveFromWishList(
+                                                userId = user?.id,
+                                                place = place
+                                            )
+                                        )
+                                    },
+                                    intent = Intent(Intent.ACTION_VIEW).apply {
+                                        data = Uri.parse(place.mapsUrl)
+                                        setPackage("com.google.android.apps.maps")
+                                    }
+                                )
+                            }
                         }
                     }
                 }

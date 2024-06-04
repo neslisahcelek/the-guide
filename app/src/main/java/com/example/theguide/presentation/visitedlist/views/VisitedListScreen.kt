@@ -36,6 +36,7 @@ import com.example.theguide.domain.model.User
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.presentation.visitedlist.VisitedListAction
 import com.example.theguide.presentation.visitedlist.VisitedListState
+import com.example.theguide.ui.component.LoadingScreen
 import com.example.theguide.ui.component.PrimaryTopAppBar
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.util.Util
@@ -70,16 +71,7 @@ fun VisitedListScreen(
                     .background(MaterialTheme.colorScheme.surface)
             ) {
                 if (state.isLoading) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "loading",
-                        modifier = Modifier.padding(top = 200.dp).size(200.dp),
-                    )
-                    Text(
-                        text = stringResource(id = R.string.loading), textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(10.dp),
-                        color = Color.Black
-                    )
+                    LoadingScreen()
                 } else {
                     if (state.visitedList?.isEmpty() == true) {
                         Text(
@@ -131,7 +123,7 @@ fun WishListScreenPreview() {
             ),
             state = VisitedListState(
                 visitedList = Util.getPlaceList(),
-                isLoading = true
+                isLoading = false
             )
         )
     }

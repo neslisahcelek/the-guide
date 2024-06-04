@@ -23,28 +23,25 @@ class WelcomeVM @Inject constructor(
 
     init {
         fetchPlaces()
-
-        val placeList = Util.getPlaceList()
-
-        _state.update {
-            it.copy(
-                placeList = placeList,
-                currentPlace = placeList.first(),
-                currentPlaceIndex = 0
-            )
-        }
     }
 
     private fun fetchPlaces() {
         viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
             val result = getTopPlacesUseCase.execute()
             val placeList = result.data
             if (!placeList.isNullOrEmpty()) {
+                Log.d("WelcomeVM", "placeList: $placeList")
                 _state.update {
                     it.copy(
                         placeList = placeList,
                         currentPlace = placeList.first(),
-                        currentPlaceIndex = 0
+                        currentPlaceIndex = 0,
+                        isLoading = false
                     )
                 }
             }

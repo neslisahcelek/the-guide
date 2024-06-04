@@ -33,7 +33,7 @@ class DashboardVM @Inject constructor(
         when (action) {
             is DashboardAction.LoadDashboard -> {
                 loadDashboard()
-                getRecommendations(user = action.user)
+                //getRecommendations(user = action.user)
             }
 
             is DashboardAction.AddToWishList -> addToWishList(action.userId, action.place)
@@ -52,17 +52,18 @@ class DashboardVM @Inject constructor(
                 userId = userId ?: "",
                 districtList = filteredDistricts.map { it.text }
             )
-            Log.d("getRecommendation", "${result.data?.size} ${result.message}")
             if (result.data != null) {
                 _state.update {
                     it.copy(
-                        places = result.data
+                        places = result.data,
+                        isLoading = false
                     )
                 }
             } else {
                 _state.update {
                     it.copy(
-                        error = result.message
+                        error = result.message,
+                        isLoading = false
                     )
                 }
                 Log.d("getRecommendation", result.message ?: "")
@@ -121,13 +122,15 @@ class DashboardVM @Inject constructor(
             if (result.data != null) {
                 _state.update {
                     it.copy(
-                        places = result.data
+                        places = result.data,
+                        isLoading = false
                     )
                 }
             } else {
                 _state.update {
                     it.copy(
-                        error = result.message
+                        error = result.message,
+                        isLoading = false
                     )
                 }
                 Log.d("getRecommendation", result.message ?: "")
