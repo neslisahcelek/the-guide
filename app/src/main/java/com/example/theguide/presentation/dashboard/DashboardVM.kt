@@ -32,8 +32,8 @@ class DashboardVM @Inject constructor(
     fun onAction(action: DashboardAction) {
         when (action) {
             is DashboardAction.LoadDashboard -> {
-                loadDashboard()
-                //getRecommendations(user = action.user)
+                //loadDashboard()
+                getRecommendations(user = action.user)
             }
 
             is DashboardAction.AddToWishList -> addToWishList(action.userId, action.place)
@@ -55,7 +55,7 @@ class DashboardVM @Inject constructor(
             if (result.data != null) {
                 _state.update {
                     it.copy(
-                        places = result.data,
+                        places = result.data.sortedByDescending { it.expectedScore },
                         isLoading = false
                     )
                 }
@@ -118,11 +118,10 @@ class DashboardVM @Inject constructor(
             val result = getRecommendationUseCase.execute(
                 userId = user?.id ?: ""
             )
-            Log.d("getRecommendation", "${result.data?.size} ${result.message}")
             if (result.data != null) {
                 _state.update {
                     it.copy(
-                        places = result.data,
+                        places = result.data.sortedByDescending { it.expectedScore },
                         isLoading = false
                     )
                 }

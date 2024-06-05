@@ -45,7 +45,7 @@ class VisitedListVM @Inject constructor() : ViewModel() {
                         it.copy(visitedList = emptyList())
                     }
                 } else {
-                    val visitedList = result.toObjects(PlaceModel::class.java)
+                    val visitedList = result.toObjects(PlaceModel::class.java).sortedByDescending { it.userRating }
                     _state.update {
                         it.copy(
                             visitedList = visitedList,

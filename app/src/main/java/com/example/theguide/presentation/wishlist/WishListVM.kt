@@ -59,7 +59,7 @@ class WishListVM @Inject constructor(
                         )
                     }
                 } else {
-                    val wishList = result.toObjects(PlaceModel::class.java)
+                    val wishList = result.toObjects(PlaceModel::class.java).sortedBy { it.placeName }
                     _state.update {
                         it.copy(
                             wishList = wishList,
