@@ -73,6 +73,42 @@ fun DashboardScreen(
                 text = "Kepez",
                 isChecked = false
             ),
+            CheckboxState(
+                text = "Alanya",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Demre",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Döşemealtı",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Aksu",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Kaş",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Kemer",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Kumluca",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Manavgat",
+                isChecked = false
+            ),
+            CheckboxState(
+                text = "Serik",
+                isChecked = false
+            ),
         )
     }
 
@@ -107,6 +143,14 @@ fun DashboardScreen(
                     LoadingScreen()
                 } else {
                     Box {
+                        if (state.places.isEmpty()) {
+                            Text(
+                                text = stringResource(id = R.string.filter_empty),
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.padding(top = 80.dp)
+                            )
+                        }
                         LazyColumn(
                             modifier = Modifier.fillMaxHeight(),
                             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -140,7 +184,6 @@ fun DashboardScreen(
                         }
                         Column(
                             modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.End,
                         ) {
                             if (isFilterClicked) {
                                 DistrictCheckbox(districts)
