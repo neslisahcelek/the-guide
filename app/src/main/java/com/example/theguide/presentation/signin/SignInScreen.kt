@@ -62,7 +62,6 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-
             Image(
                 painterResource(id = R.drawable.bg2),
                 contentDescription = "background",
@@ -133,18 +132,6 @@ fun SignInScreen(
         }
     }
 }
-
-fun Modifier.gradientBackground(colors: List<Color>): Modifier = this
-    .background(
-        brush = Brush.linearGradient(
-            colors = listOf(
-                bg1,
-                bg2,
-                softOrange,
-                softBlurOrange
-            )
-        )
-    )
 
 @Preview(showBackground = true)
 @Composable

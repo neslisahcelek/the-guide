@@ -45,66 +45,53 @@ fun WishListScreen(
         action.invoke(WishListAction.LoadWishList(user?.id ?: "1"))
     }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                PrimaryTopAppBar(
-                    title = stringResource(id = R.string.wishlist_screen_title),
-                    onBackClick = { navigate.invoke(Route.ProfileScreen.route) }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        if (state.isLoading) {
+            LoadingScreen()
+        } else {
+            if (state.wishList.isEmpty()) {
+                Text(
+                    text = stringResource(id = R.string.wishlist_empty),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(top = 80.dp)
                 )
-            }
-        ) { values ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(values)
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-            ) {
-                if (state.isLoading) {
-                    LoadingScreen()
-                } else {
-                    if (state.wishList.isEmpty()) {
-                        Text(
-                            text = stringResource(id = R.string.wishlist_empty),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(top = 80.dp)
-                        )
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Button(
-                            onClick = { navigate.invoke(Route.DashboardScreen.route) }) {
-                            Text(
-                                text = stringResource(id = R.string.wishlist_button),
-                            )
-                        }
-                    } else {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            contentPadding = PaddingValues(10.dp),
-                        ) {
-                            items(state.wishList) { place ->
-                                WishCard(
-                                    action = action,
-                                    userId = user?.id,
-                                    place = place,
-                                    onRemoveFromWishList = {
-                                        action.invoke(
-                                            WishListAction.RemoveFromWishList(
-                                                userId = user?.id,
-                                                place = place
-                                            )
-                                        )
-                                    },
-                                    intent = Intent(Intent.ACTION_VIEW).apply {
-                                        data = Uri.parse(place.mapsUrl)
-                                        setPackage("com.google.android.apps.maps")
-                                    }
+                Spacer(modifier = Modifier.padding(10.dp))
+                Button(
+                    onClick = { navigate.invoke(Route.DashboardScreen.route) }) {
+                    Text(
+                        text = stringResource(id = R.string.wishlist_button),
+                    )
+                }
+            } else {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(10.dp),
+                ) {
+                    items(state.wishList) { place ->
+                        WishCard(
+                            action = action,
+                            userId = user?.id,
+                            place = place,
+                            onRemoveFromWishList = {
+                                action.invoke(
+                                    WishListAction.RemoveFromWishList(
+                                        userId = user?.id,
+                                        place = place
+                                    )
                                 )
+                            },
+                            intent = Intent(Intent.ACTION_VIEW).apply {
+                                data = Uri.parse(place.mapsUrl)
+                                setPackage("com.google.android.apps.maps")
                             }
-                        }
+                        )
                     }
                 }
             }

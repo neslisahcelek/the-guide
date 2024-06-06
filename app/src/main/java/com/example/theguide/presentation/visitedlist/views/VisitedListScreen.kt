@@ -51,63 +51,51 @@ fun VisitedListScreen(
     LaunchedEffect(key1 = Unit) {
         action.invoke(VisitedListAction.LoadVisitedList(user?.id ?: "1"))
     }
-
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                PrimaryTopAppBar(
-                    title = stringResource(id = R.string.visited_list_screen_title),
-                    onBackClick = { navigate.invoke(Route.WishListScreen.route) }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            //.padding(values)
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        if (state.isLoading) {
+            LoadingScreen()
+        } else {
+            if (state.visitedList?.isEmpty() == true) {
+                Text(
+                    text = stringResource(id = R.string.wishlist_empty),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(top = 80.dp)
                 )
-            }
-        ) { values ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(values)
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-            ) {
-                if (state.isLoading) {
-                    LoadingScreen()
-                } else {
-                    if (state.visitedList?.isEmpty() == true) {
-                        Text(
-                            text = stringResource(id = R.string.wishlist_empty),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(top = 80.dp)
-                        )
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Button(
-                            onClick = { navigate.invoke(Route.DashboardScreen.route) }) {
-                            Text(
-                                text = stringResource(id = R.string.wishlist_button),
-                            )
-                        }
-                    } else {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            contentPadding = PaddingValues(10.dp),
-                        ) {
-                            items(state.visitedList.orEmpty()) { place ->
-                                VisitedPlaceCard(
-                                    place = place,
-                                    intent = Intent(Intent.ACTION_VIEW).apply {
-                                        data = Uri.parse(place.mapsUrl)
-                                        setPackage("com.google.android.apps.maps")
-                                    }
-                                )
+                Spacer(modifier = Modifier.padding(10.dp))
+                Button(
+                    onClick = { navigate.invoke(Route.DashboardScreen.route) }) {
+                    Text(
+                        text = stringResource(id = R.string.wishlist_button),
+                    )
+                }
+            } else {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(10.dp),
+                ) {
+                    items(state.visitedList.orEmpty()) { place ->
+                        VisitedPlaceCard(
+                            place = place,
+                            intent = Intent(Intent.ACTION_VIEW).apply {
+                                data = Uri.parse(place.mapsUrl)
+                                setPackage("com.google.android.apps.maps")
                             }
-                        }
+                        )
                     }
                 }
             }
         }
     }
 }
+
 
 @Preview
 @Composable

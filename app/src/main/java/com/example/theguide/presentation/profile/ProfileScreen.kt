@@ -44,27 +44,16 @@ fun ProfileScreen(
     user: User? = null,
     onSignOut: () -> Unit = {}
 ) {
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                PrimaryTopAppBar(
-                    title = stringResource(id = R.string.profile_screen_title),
-                    onBackClick = { navigate.invoke(Route.DashboardScreen.route) }
-                )
-            }
-        ) { values ->
-            Box {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(values)
-                        .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                        .background(MaterialTheme.colorScheme.surface),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(40.dp)
-                ) {
-                    /*
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .background(MaterialTheme.colorScheme.surface),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(40.dp)
+        ) {
+            /*
                     Image(
                         painter = painterResource(R.drawable.bg),
                         contentScale = ContentScale.FillBounds,
@@ -77,63 +66,53 @@ fun ProfileScreen(
                     )
                     */
 
-                    AsyncImage(
-                        model = user?.picture,
-                        contentDescription = "Profile Image",
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier
-                            .padding(top = 40.dp)
-                            .width(180.dp)
-                            .height(180.dp)
-                            .clip(RoundedCornerShape(90.dp))
-                    )
+            AsyncImage(
+                model = user?.picture,
+                contentDescription = "Profile Image",
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .padding(top = 40.dp)
+                    .width(180.dp)
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(90.dp))
+            )
 
 
 
-                    Text(
-                        text = user?.displayName ?: "",
-                        color = softOrange,
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight(700),
-                            fontSize = 30.sp
-                        )
-                    )
+            Text(
+                text = user?.displayName ?: "",
+                color = softOrange,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight(700),
+                    fontSize = 30.sp
+                )
+            )
 
-                    ProfileRow(
-                        title = stringResource(id = R.string.profile_email),
-                        value = user?.email ?: ""
-                    )
+            ProfileRow(
+                title = stringResource(id = R.string.profile_email),
+                value = user?.email ?: ""
+            )
 
-                    ProfileRow(
-                        title = stringResource(id = R.string.profile_city),
-                        value = state.city
-                    )
+            ProfileRow(
+                title = stringResource(id = R.string.profile_city),
+                value = state.city
+            )
+        }
 
-                    Button(onClick = { navigate.invoke(Route.WishListScreen.route) }) {
-                        Text(text = "Gitmek istediğin yerler")
-                    }
-
-                    Button(onClick = { navigate.invoke(Route.VisitedListScreen.route) }) {
-                        Text(text = "Gittiğin yerler")
-                    }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 80.dp)
+        ) {
+            Button(
+                onClick = {
+                    onSignOut.invoke()
+                    action.invoke(ProfileAction.Logout)
                 }
-
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 80.dp)
-                ) {
-                    Button(
-                        onClick = {
-                            onSignOut.invoke()
-                            action.invoke(ProfileAction.Logout)
-                        }
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.signup_button)
-                        )
-                    }
-                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.signup_button)
+                )
             }
         }
     }
@@ -155,10 +134,12 @@ fun ProfileRow(title: String, value: String) {
                 fontSize = 16.sp
             )
         )
-        Spacer(modifier = Modifier
-            .height(1.dp)
-            .fillMaxWidth()
-            .background(Color.LightGray))
+        Spacer(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(Color.LightGray)
+        )
         Text(
             text = value,
             color = Color.Black,

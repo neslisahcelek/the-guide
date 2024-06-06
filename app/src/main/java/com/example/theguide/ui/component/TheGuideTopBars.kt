@@ -52,6 +52,29 @@ fun PrimaryTopAppBar(
                 color = Color.White
             )
         },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileTopAppBar(
+    title: String,
+    onBackClick: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                style = Typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
+                ),
+                color = Color.White
+            )
+        },
         navigationIcon = {
             IconButton(
                 onClick = { onBackClick.invoke() }

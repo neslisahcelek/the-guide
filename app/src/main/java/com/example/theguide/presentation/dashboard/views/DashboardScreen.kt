@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,8 +53,8 @@ import com.example.theguide.util.Util
 fun DashboardScreen(
     action: (DashboardAction) -> Unit = {},
     state: DashboardState = DashboardState(),
-    navigate: (String) -> Unit = {},
-    user: User? = null
+    user: User? = null,
+    isFilterClicked: Boolean = false
 ) {
     LaunchedEffect(key1 = Unit) {
         action.invoke(DashboardAction.LoadDashboard(user))
@@ -62,133 +63,100 @@ fun DashboardScreen(
     val districts = remember {
         mutableStateListOf(
             CheckboxState(
-                text = "Konyaaltı",
-                isChecked = false
+                text = "Konyaaltı"
             ),
             CheckboxState(
-                text = "Muratpaşa",
-                isChecked = false
+                text = "Muratpaşa"
             ),
             CheckboxState(
-                text = "Kepez",
-                isChecked = false
+                text = "Kepez"
             ),
             CheckboxState(
-                text = "Alanya",
-                isChecked = false
+                text = "Alanya"
             ),
             CheckboxState(
-                text = "Demre",
-                isChecked = false
+                text = "Demre"
             ),
             CheckboxState(
-                text = "Döşemealtı",
-                isChecked = false
+                text = "Döşemealtı"
             ),
             CheckboxState(
-                text = "Aksu",
-                isChecked = false
+                text = "Aksu"
             ),
             CheckboxState(
-                text = "Kaş",
-                isChecked = false
+                text = "Kaş"
             ),
             CheckboxState(
-                text = "Kemer",
-                isChecked = false
+                text = "Kemer"
             ),
             CheckboxState(
-                text = "Kumluca",
-                isChecked = false
+                text = "Kumluca"
             ),
             CheckboxState(
-                text = "Manavgat",
-                isChecked = false
+                text = "Manavgat"
             ),
-            CheckboxState(
-                text = "Serik",
-                isChecked = false
-            ),
+            CheckboxState(text = "Serik"),
         )
     }
 
-    var isFilterClicked by remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = isFilterClicked) {
+        action.invoke(DashboardAction.FilterDistricts(districts = districts, userId = user?.id))
+    }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                DashboardTopAppBar(
-                    title = stringResource(id = R.string.dashboard_screen_title),
-                    onFilterClick = {
-                        if (isFilterClicked) {
-                            isFilterClicked = false
-                            action.invoke(DashboardAction.FilterDistricts(districts, user?.id))
-                        } else {
-                            isFilterClicked = true
-                        }
-                    },
-                    onProfileClick = { navigate.invoke(Route.ProfileScreen.route) }
-                )
-            }
-        ) { values ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(values)
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-            ) {
-                if (state.isLoading) {
-                    LoadingScreen()
-                } else {
-                    Box {
-                        if (state.places.isEmpty()) {
-                            Text(
-                                text = stringResource(id = R.string.filter_empty),
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.padding(top = 80.dp)
-                            )
-                        }
-                        LazyColumn(
-                            modifier = Modifier.fillMaxHeight(),
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            contentPadding = PaddingValues(10.dp),
-                        ) {
-                            items(state.places) { place ->
-                                RecommendationCard(
-                                    place = place,
-                                    onAddToWishList = {
-                                        action.invoke(
-                                            DashboardAction.AddToWishList(
-                                                userId = user?.id,
-                                                place = place
-                                            )
-                                        )
-                                    },
-                                    onRemoveFromWishList = {
-                                        action.invoke(
-                                            DashboardAction.RemoveFromWishList(
-                                                userId = user?.id,
-                                                place = place
-                                            )
-                                        )
-                                    },
-                                    intent = Intent(Intent.ACTION_VIEW).apply {
-                                        data = Uri.parse(place.mapsUrl)
-                                        setPackage("com.google.android.apps.maps")
-                                    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        if (state.isLoading) {
+            LoadingScreen()
+        } else {
+            Box {
+                if (state.places.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.filter_empty),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(top = 80.dp)
+                    )
+                }
+                LazyColumn(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(10.dp),
+                ) {
+                    items(state.places) { place ->
+                        RecommendationCard(
+                            place = place,
+                            onAddToWishList = {
+                                action.invoke(
+                                    DashboardAction.AddToWishList(
+                                        userId = user?.id,
+                                        place = place
+                                    )
                                 )
+                            },
+                            onRemoveFromWishList = {
+                                action.invoke(
+                                    DashboardAction.RemoveFromWishList(
+                                        userId = user?.id,
+                                        place = place
+                                    )
+                                )
+                            },
+                            intent = Intent(Intent.ACTION_VIEW).apply {
+                                data = Uri.parse(place.mapsUrl)
+                                setPackage("com.google.android.apps.maps")
                             }
-                        }
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                        ) {
-                            if (isFilterClicked) {
-                                DistrictCheckbox(districts)
-                            }
-                        }
+                        )
+                    }
+                }
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    if (isFilterClicked) {
+                        DistrictCheckbox(districts)
                     }
                 }
             }
