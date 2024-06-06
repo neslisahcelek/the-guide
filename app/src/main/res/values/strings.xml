@@ -25,5 +25,6 @@
     <string name="visited_list_screen_title">Geçmiş Ziyaretlerin</string>
     <string name="visited_place_rating">Bu mekana %1$s puan verdin.</string>
     <string name="loading">Mekanlar yükleniyor...</string>
-
+    <string name="filter_empty">Bu bölgede sana önerebileceğimiz mekan bulunmamaktadır. \nİstersen, farklı bir bölge filtrelemeyi deneyebilirsin.</string>
+    <string name="district_checkbox_title">Öneri Almak İstediğin Bölgeyi Seç</string>
 </resources>
