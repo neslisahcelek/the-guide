@@ -63,7 +63,7 @@ fun SignInScreen(
                 .fillMaxSize()
         ) {
             Image(
-                painterResource(id = R.drawable.bg2),
+                painterResource(id = R.drawable.bg),
                 contentDescription = "background",
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize(),
@@ -72,19 +72,17 @@ fun SignInScreen(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(150.dp))
-
-                Icon(
-                    Icons.Filled.CheckCircle,
-                    contentDescription = "app icon",
-                    tint = softOrange,
-                    modifier = Modifier.size(100.dp)
+                Image(
+                    painterResource(id = R.drawable.logo),
+                    contentDescription = "app logo",
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.padding(top=80.dp).size(140.dp),
                 )
 
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 30.dp, top = 300.dp),
+                        .padding(start = 30.dp, top = 340.dp),
                     textAlign = TextAlign.Start,
                     text = stringResource(id = R.string.login_screen_title),
                     style = Typography.headlineMedium.copy(
