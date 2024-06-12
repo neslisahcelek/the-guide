@@ -109,7 +109,7 @@ fun RateCard(
                     .background(MaterialTheme.colorScheme.surface)
                     .fillMaxWidth()
                     .height(180.dp),
-                placeholder = painterResource(id = R.drawable.understone)
+                placeholder = painterResource(id = R.drawable.logo)
             )
 
             Spacer(modifier = Modifier.height(10.dp))

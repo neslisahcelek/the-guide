@@ -118,9 +118,7 @@ fun RecommendationCard(
                 AsyncImage(
                     model = if (place.photos.isNotEmpty()) {
                         place.photos.first()
-                    } else {
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR_abBtnzBFl_-kLkB-fbC-nskMexTTiE7w9GroVJTGA&s"
-                    },
+                    } else { },
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .background(Color.Black)
@@ -131,7 +129,7 @@ fun RecommendationCard(
                         .height(180.dp)
                         .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
                     contentDescription = "Place Image",
-                    placeholder = painterResource(id = R.drawable.understone)
+                    placeholder = painterResource(id = R.drawable.logo)
                 )
 
                 val initialIsInList = false

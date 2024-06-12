@@ -122,7 +122,7 @@ fun VisitedPlaceCard(
                     .height(180.dp)
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
                 contentDescription = "Place Image",
-                placeholder = painterResource(id = R.drawable.logo)
+                //placeholder = painterResource(id = R.drawable.logo)
             )
 
             Text(
