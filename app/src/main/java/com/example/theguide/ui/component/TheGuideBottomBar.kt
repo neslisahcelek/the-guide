@@ -1,5 +1,7 @@
 package com.example.theguide.ui.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Favorite
@@ -8,6 +10,7 @@ import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -16,9 +19,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.theguide.presentation.navigation.Route
+import com.example.theguide.ui.theme.softOrange
 
 @Composable
 fun TheGuideBottomBar(navController: NavController) {
@@ -43,7 +50,10 @@ fun TheGuideBottomBar(navController: NavController) {
         mutableStateOf(1)
     }
 
-    NavigationBar {
+    NavigationBar (
+        modifier = Modifier.height(90.dp),
+        containerColor = MaterialTheme.colorScheme.onPrimary
+    ) {
         navItems.forEachIndexed { index, item ->
             NavigationBarItem(
                 icon = {
