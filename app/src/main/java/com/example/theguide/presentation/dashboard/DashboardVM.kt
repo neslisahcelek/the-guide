@@ -32,8 +32,7 @@ class DashboardVM @Inject constructor(
     fun onAction(action: DashboardAction) {
         when (action) {
             is DashboardAction.LoadDashboard -> {
-                //loadDashboard()
-                getRecommendations(user = action.user)
+                getRecommendations(userId = action.userId)
             }
 
             is DashboardAction.AddToWishList -> addToWishList(action.userId, action.place)
@@ -44,6 +43,13 @@ class DashboardVM @Inject constructor(
 
     private fun filterDistricts(districts: List<CheckboxState>, userId: String?) {
         val filteredDistricts = districts.filter { it.isChecked }
+        Log.d("districts", "$filteredDistricts")
+
+        if (filteredDistricts.isEmpty()) {
+            Log.d("districts", "$filteredDistricts")
+            getRecommendations(userId = userId)
+        }
+
         viewModelScope.launch {
             _state.update {
                 it.copy(isLoading = true)
@@ -55,7 +61,7 @@ class DashboardVM @Inject constructor(
             if (result.data != null) {
                 _state.update {
                     it.copy(
-                        places = result.data.sortedByDescending { it.expectedScore },
+                        places = result.data,
                         isLoading = false
                     )
                 }
@@ -110,21 +116,23 @@ class DashboardVM @Inject constructor(
         }
     }
 
-    private fun getRecommendations(user: User?) {
+    private fun getRecommendations(userId: String?) {
         viewModelScope.launch {
             _state.update {
                 it.copy(isLoading = true)
             }
             val result = getRecommendationUseCase.execute(
-                userId = user?.id ?: ""
+                userId = userId ?: ""
             )
             if (result.data != null) {
                 _state.update {
                     it.copy(
-                        places = result.data.sortedByDescending { it.expectedScore },
+                        places = result.data,//.sortedByDescending { it.expectedScore },
                         isLoading = false
                     )
                 }
+                Log.d("recom", "${result.data}")
+
             } else {
                 _state.update {
                     it.copy(
@@ -134,15 +142,6 @@ class DashboardVM @Inject constructor(
                 }
                 Log.d("getRecommendation", result.message ?: "")
             }
-        }
-    }
-
-    private fun loadDashboard() {
-        val placeList = Util.getPlaceList()
-        _state.update {
-            it.copy(
-                places = placeList
-            )
         }
     }
 }

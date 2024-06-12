@@ -57,7 +57,7 @@ fun DashboardScreen(
     isFilterClicked: Boolean = false
 ) {
     LaunchedEffect(key1 = Unit) {
-        action.invoke(DashboardAction.LoadDashboard(user))
+        action.invoke(DashboardAction.LoadDashboard(user?.id))
     }
 
     val districts = remember {
@@ -101,6 +101,7 @@ fun DashboardScreen(
 
     var isFilterListOpen by remember { mutableStateOf(false) }
 
+    /*
     LaunchedEffect(key1 = isFilterClicked) {
         isFilterListOpen = !isFilterListOpen
     }
@@ -109,6 +110,12 @@ fun DashboardScreen(
         if (isFilterListOpen){
             action.invoke(DashboardAction.FilterDistricts(districts = districts, userId = user?.id))
         }
+    }
+
+     */
+
+    LaunchedEffect(key1 = isFilterClicked) {
+        action.invoke(DashboardAction.FilterDistricts(districts = districts, userId = user?.id))
     }
 
     Column(
