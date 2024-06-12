@@ -99,8 +99,16 @@ fun DashboardScreen(
         )
     }
 
+    var isFilterListOpen by remember { mutableStateOf(false) }
+
     LaunchedEffect(key1 = isFilterClicked) {
-        action.invoke(DashboardAction.FilterDistricts(districts = districts, userId = user?.id))
+        isFilterListOpen = !isFilterListOpen
+    }
+
+    LaunchedEffect(key1 = isFilterListOpen) {
+        if (isFilterListOpen){
+            action.invoke(DashboardAction.FilterDistricts(districts = districts, userId = user?.id))
+        }
     }
 
     Column(

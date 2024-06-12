@@ -1,10 +1,18 @@
 package com.example.theguide
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -65,7 +73,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         installSplashScreen() //.setKeepOnScreenCondition{  }
+        //enableEdgeToEdge(statusBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT))
         setContent {
             TheGuideTheme {
                 Surface(
@@ -74,16 +84,24 @@ class MainActivity : ComponentActivity() {
                         .background(softOrange)
                 ) {
                     val navController = rememberNavController()
+
+                    /*
+                    LaunchedEffect(Unit) {
+                        window.decorView.systemUiVisibility = (
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                )
+                    }
+                     */
                     var isFilterClicked by remember { mutableStateOf(false) }
 
                     val actions = TopBarActions(
                         onFilterClick = {
-                            if (isFilterClicked) {
-                                isFilterClicked = false
-                                //DashboardAction.FilterDistricts(districts, user?.id))
-                            } else {
-                                isFilterClicked = true
-                            }
+                            isFilterClicked = !isFilterClicked
                         },
                         onProfileClick = {
                             navController.navigate(Route.ProfileScreen.route)
