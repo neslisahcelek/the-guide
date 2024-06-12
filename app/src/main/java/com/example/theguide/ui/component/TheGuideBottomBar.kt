@@ -22,8 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.theguide.R
 import com.example.theguide.presentation.navigation.Route
 import com.example.theguide.ui.theme.softOrange
 
@@ -42,8 +44,8 @@ fun TheGuideBottomBar(navController: NavController) {
         ),
         BottomNavItem(
             route = Route.VisitedListScreen.route,
-            selectedIcon = Icons.Filled.AddCircle,
-            unselectedIcon = Icons.Outlined.AddCircle
+            selectedIcon = ImageVector.vectorResource(R.drawable.event),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.event)
         ),
     )
     var selectedItemIndex by rememberSaveable {
