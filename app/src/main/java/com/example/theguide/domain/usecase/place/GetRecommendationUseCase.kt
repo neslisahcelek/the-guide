@@ -8,7 +8,7 @@ class GetRecommendationUseCase @Inject constructor(
 ) {
     suspend fun execute(
         userId: String,
-        recommendationLimit: Int = 15,
+        recommendationLimit: Int = 10,
         districtList: List<String> = listOf()
     ) = placeRepository.getRecommendation(
         userId = userId,
