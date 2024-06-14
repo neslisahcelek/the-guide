@@ -27,4 +27,6 @@
     <string name="loading">Mekanlar yükleniyor...</string>
     <string name="filter_empty">Bu bölgede sana önerebileceğimiz mekan bulunmamaktadır. \nİstersen farklı bir bölge filtrelemeyi deneyebilirsin.</string>
     <string name="district_checkbox_title">Öneri Almak İstediğin Bölgeyi Seç</string>
+    <string name="visitedlist_empty">Listende mekan bulunmamaktadır. \nİstersen, Ziyaret ettiğin mekanlara puan verebilirsin.</string>
+
 </resources>

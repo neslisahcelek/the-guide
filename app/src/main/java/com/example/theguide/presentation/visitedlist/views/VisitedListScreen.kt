@@ -64,7 +64,7 @@ fun VisitedListScreen(
         } else {
             if (state.visitedList?.isEmpty() == true) {
                 Text(
-                    text = stringResource(id = R.string.wishlist_empty),
+                    text = stringResource(id = R.string.visitedlist_empty),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(top = 80.dp)
