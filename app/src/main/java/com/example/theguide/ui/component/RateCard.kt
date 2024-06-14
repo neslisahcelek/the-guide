@@ -47,6 +47,7 @@ import com.example.theguide.presentation.welcome.WelcomeState
 import com.example.theguide.ui.theme.TheGuideTheme
 import com.example.theguide.ui.theme.bg
 import com.example.theguide.util.Util
+import kotlin.math.roundToInt
 
 @Composable
 fun RateCard(
@@ -142,7 +143,7 @@ fun RatingSlider(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = sliderPosition.toInt().toString(),
+            text = sliderPosition.roundToInt().toString(),
             modifier = Modifier.padding(start = 10.dp),
             style = MaterialTheme.typography.titleMedium,
             color = Color.Black
@@ -167,11 +168,12 @@ fun RatingSlider(
     ) {
         Button(
             onClick = {
+                val roundedRating = sliderPosition.roundToInt().toDouble()
                 action.invoke(
                     WelcomeAction.RatePlace(
                         userId = userId ?: "",
                         placeId = placeId,
-                        rating = sliderPosition.toDouble()
+                        rating = roundedRating
                     )
                 )
             },

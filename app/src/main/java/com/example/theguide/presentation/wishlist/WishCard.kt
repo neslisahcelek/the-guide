@@ -61,6 +61,7 @@ import com.example.theguide.ui.theme.bg
 import com.example.theguide.ui.theme.softOrange
 import com.example.theguide.ui.theme.yellow
 import com.example.theguide.util.Util
+import kotlin.math.roundToInt
 
 @Composable
 fun WishCard(
@@ -216,7 +217,7 @@ fun WishCard(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = sliderPosition.toInt().toString(),
+                        text = sliderPosition.roundToInt().toString(),
                         modifier = Modifier.padding(start = 10.dp),
                         style = MaterialTheme.typography.titleMedium,
                         color = Color.Black
@@ -237,11 +238,12 @@ fun WishCard(
 
                 Button(
                     onClick = {
+                        val roundedRating = sliderPosition.roundToInt().toDouble()
                         action.invoke(
                             WishListAction.RatePlace(
                                 userId = userId ?: "",
                                 place = place,
-                                rating = sliderPosition.toDouble()
+                                rating = roundedRating
                             )
                         )
                         addRatingButtonClicked = false
