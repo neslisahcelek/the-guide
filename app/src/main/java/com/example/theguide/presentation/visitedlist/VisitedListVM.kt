@@ -42,10 +42,14 @@ class VisitedListVM @Inject constructor() : ViewModel() {
                 val result = Tasks.await(document.get())
                 if (result.isEmpty) {
                     _state.update {
-                        it.copy(visitedList = emptyList())
+                        it.copy(
+                            visitedList = emptyList(),
+                            isLoading = false
+                        )
                     }
                 } else {
-                    val visitedList = result.toObjects(PlaceModel::class.java).sortedByDescending { it.userRating }
+                    val visitedList = result.toObjects(PlaceModel::class.java)
+                        .sortedByDescending { it.userRating }
                     _state.update {
                         it.copy(
                             visitedList = visitedList,
